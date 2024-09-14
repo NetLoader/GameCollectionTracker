@@ -1,2 +1,2 @@
 # GameCollectionTracker
-Creating a game collection tracker website for my CISC 4900
+Creating a game collection tracker web-based application for my CISC 4900

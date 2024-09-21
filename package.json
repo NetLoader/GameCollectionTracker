@@ -1,0 +1,17 @@
+{
+  "name": "game_collection_tracker",
+  "version": "1.0.0",
+  "description": "CISC 4900 Project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server",
+    "dev": "node --watch --env-file=.env server"
+  },
+  "author": "Zheng Heng Kwong",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.0",
+    "mysql2": "^3.11.3"
+  }
+}

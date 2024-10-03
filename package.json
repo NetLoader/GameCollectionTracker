@@ -11,6 +11,7 @@
   "author": "Zheng Heng Kwong",
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.7.7",
     "express": "^4.21.0",
     "mysql2": "^3.11.3"
   }

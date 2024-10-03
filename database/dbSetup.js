@@ -10,7 +10,7 @@ export async function dbSetup() {
     console.log("Connected to MySQL database server");
 
     await connection.query("CREATE DATABASE IF NOT EXISTS game_collection_tracker_db");
-    console.log("Database created or already exists");
+    console.log("Database created");
 
     await connection.query("USE game_collection_tracker_db");
 
@@ -48,7 +48,7 @@ export async function dbSetup() {
             developer_id INT,
             publisher_id INT, 
             game_title VARCHAR(255),
-            game_description VARCHAR(255),
+            game_description TEXT,
             game_release_date DATE,
             game_average_time VARCHAR(255),
             game_image_url VARCHAR(255),
@@ -58,7 +58,6 @@ export async function dbSetup() {
     `);
 
     //Platforms Table 
-    // @desc This table store all the possible platforms: Steam, Epic Games, PlayStation Store, etc
     await connection.query(`
         CREATE TABLE IF NOT EXISTS Platforms(
             platform_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -67,7 +66,6 @@ export async function dbSetup() {
     `);
 
     //GamePlatform Table
-    // @desc A junction table to link Games and Platforms table
     await connection.query(`
         CREATE TABLE IF NOT EXISTS GamePlatform(
             game_id INT,
@@ -79,7 +77,6 @@ export async function dbSetup() {
     `);
 
     //Genres Table
-    // @desc This table stores all the possible genres: Action, Adventure, RPG, etc
     await connection.query(`
         CREATE TABLE IF NOT EXISTS Genres(
             genre_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -88,7 +85,6 @@ export async function dbSetup() {
     `);
 
     //GameGenre Table
-    // @desc A junction table to link Games and Genre table
     await connection.query(`
         CREATE TABLE IF NOT EXISTS GameGenre(
             game_id INT,
@@ -96,6 +92,15 @@ export async function dbSetup() {
             PRIMARY KEY (game_id, genre_id),
             FOREIGN KEY (game_id) REFERENCES Games(game_id),
             FOREIGN KEY (genre_id) REFERENCES Genres(genre_id)
+        );
+    `);
+
+    //UserGames Table
+    await connection.query(`
+        CREATE TABLE IF NOT EXISTS UserGames(
+            user_id INT,
+            game_id INT,
+            status ENUM('Completed', 'Playing', 'Dropped', 'Plan to Play') DEFAULT 'Playing'
         );
     `);
 }

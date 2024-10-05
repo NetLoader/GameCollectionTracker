@@ -40,7 +40,6 @@ export async function getGameByID(gameID) {
 }
 
 
-//gotta update my dbSetup for this to work (ON DELETE CASCADE, etc.)
 export async function deleteGame(gameID) {
     try {
         const [result] = await pool.query(`

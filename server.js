@@ -1,6 +1,8 @@
 import express from "express";
 import {dbSetup} from "./database/dbSetup.js";
 import { fetchGamesData, insertDataIntoDB } from "./api/IGDB_API.js";
+import gameRoutes from "./routes/gameRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js";
 
 
 const PORT = process.env.PORT;
@@ -19,9 +21,9 @@ async function initDatabase() {
 }
 initDatabase();
 
-
-//Testing 
-app.get("/games", async (req, res) => {
+//fetch data from IGDB and insert them into db
+// Comment this block out after fetching the data so that normal user cannot access this endpoint
+app.get("/api/fetchGamesFromIGDB", async (req, res) => {
     try {
         const gamesData = await fetchGamesData(); 
         await insertDataIntoDB(gamesData);
@@ -32,5 +34,8 @@ app.get("/games", async (req, res) => {
     }
 });
 
+//Routers
+app.use("/games", gameRoutes);
+app.use("/search", searchRoutes);
 
 app.listen(PORT, () => console.log(`Server is running on ${PORT}`));

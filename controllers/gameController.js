@@ -12,7 +12,7 @@ export async function getGames(limit, offset) {
     try {
         const [games] = await pool.query(`
             SELECT * 
-            FROM GAMES 
+            FROM Games 
             ORDER BY game_id 
             LIMIT ? OFFSET ?`, [limit, offset]);
         return games;

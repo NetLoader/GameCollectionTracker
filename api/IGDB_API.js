@@ -135,7 +135,7 @@ export async function insertDataIntoDB(gamesData) {
                 FROM Genres
                 WHERE genre_name =?`, [genre.name]
             );
-            if (genreData.length > 0) {           //try genreData != null
+            if (genreData.length > 0) {          
                 genreID = genreData[0].genre_id;    
             } else {
                 const [genreResult] = await connection.query(

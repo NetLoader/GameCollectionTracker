@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node server",
-    "dev": "node --watch --env-file=.env server"
+    "start": "node src/server",
+    "dev": "node --watch --env-file=.env src/server"
   },
   "author": "Zheng Heng Kwong",
   "license": "MIT",

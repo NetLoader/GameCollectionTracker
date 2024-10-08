@@ -1,6 +1,5 @@
 import axios from "axios";
 import mysql from "mysql2/promise";
-import { dbSetup } from "../database/dbSetup.js";
 
 export async function getAccessToken() {
     const response = await axios.post("https://id.twitch.tv/oauth2/token", null, {

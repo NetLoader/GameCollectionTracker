@@ -40,15 +40,3 @@ export async function getGameByID(gameID) {
 }
 
 
-export async function deleteGame(gameID) {
-    try {
-        const [result] = await pool.query(`
-            DELETE FROM Games 
-            WHERE game_id = ?`, [gameID]);
-        return result;
-    } catch (error) {
-        console.error("Error deleting game from controller: ", error);
-        throw error;
-    }
-}
-

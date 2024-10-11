@@ -1,3 +1,4 @@
 node_modules
 .env
 test[0-9]*.js
+backup[0-9]*.js

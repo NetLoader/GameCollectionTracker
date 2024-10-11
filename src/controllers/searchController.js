@@ -92,3 +92,33 @@ export async function getPlatformsByName(platformName) {
     }
 };
 
+// @note: for the frontend, when searching, use the game_id to redirect page (when clicked), and only show the game_title on the search result
+export async function getGameByGenre(genreName) {
+    try {
+        const [result] = await pool.query(`
+            SELECT g.game_id, g.game_title
+            FROM Games g
+            INNER JOIN GameGenre gg ON g.game_id = gg.game_id
+            INNER JOIN Genres gr ON gg.genre_id = gr.genre_id
+            WHERE gr.genre_name LIKE ?`, [`%${genreName}%`]);
+        return result;
+    } catch (error) {
+        console.error("Error fetching game by genre from controller: ", error);
+        throw error;
+    }
+}
+
+export async function getGameByPlatform(platformName) {
+    try {
+        const [result] = await pool.query(`
+            SELECT g.game_id, g.game_title, p.platform_name
+            FROM Games g
+            INNER JOIN GamePlatform gp ON g.game_id = gp.game_id
+            INNER JOIN Platforms p ON gp.platform_id = p.platform_id
+            WHERE p.platform_name LIKE ?`, [`%${platformName}%`]);
+        return result;
+    } catch (error) {
+        console.error("Error fetching game by platform from controller: ", error);
+        throw error;
+    }
+}

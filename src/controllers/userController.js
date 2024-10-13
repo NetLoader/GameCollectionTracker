@@ -1,4 +1,5 @@
 import mysql from "mysql2/promise";
+import bcrypt from "bcrypt";
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -40,9 +41,10 @@ export async function getUserByID(userID) {
 
 export async function createUser(userData) {
     try {
-        const {username, user_email, user_password_hash} = userData;
+        const {username, user_email, user_password} = userData;
+        const hashedPassword = await bcrypt.hash(user_password, 10);
         const [user] = await pool.query(`
-            INSERT INTO Users (username, user_email, user_password_hash) VALUES (?, ?, ?)`, [username, user_email, user_password_hash]);
+            INSERT INTO Users (username, user_email, user_password_hash) VALUES (?, ?, ?)`, [username, user_email, hashedPassword]);
         return (user.affectedRows > 0);
     } catch (error) {
         console.error("Error creating user from controller: ", error);
@@ -52,11 +54,12 @@ export async function createUser(userData) {
 
 export async function updateUser(userData, userID) {
     try {
-        const {username, user_email, user_password_hash} = userData;
+        const {username, user_email, user_password} = userData;
+        const hashedPassword = await bcrypt.hash(user_password, 10);
         const [user] = await pool.query(`
             UPDATE Users
             SET username = ?, user_email = ?, user_password_hash = ?
-            WHERE ?`, [username, user_email, user_password_hash, userID]);
+            WHERE user_id = ?`, [username, user_email, hashedPassword, userID]);
         return (user.affectedRows > 0);
     } catch (error) {
         console.error("Error updating user from controller: ", error);

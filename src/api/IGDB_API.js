@@ -1,5 +1,5 @@
 import axios from "axios";
-import mysql from "mysql2/promise";
+import pool from "../database/dbConnection.js";
 
 export async function getAccessToken() {
     const response = await axios.post("https://id.twitch.tv/oauth2/token", null, {
@@ -41,12 +41,6 @@ export async function fetchGamesData() {
 }
 
 export async function insertDataIntoDB(gamesData) {
-    const connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-    });
     for (const game of gamesData) {
         let developerID = null;
         let publisherID = null;
@@ -57,7 +51,7 @@ export async function insertDataIntoDB(gamesData) {
         //INSERT INTO Developers
         const developer = game.involved_companies.find(company => company.developer);
         if (developer) {
-            const [developerData] = await connection.query(
+            const [developerData] = await pool.query(
                 `SELECT developer_id 
                 FROM Developers
                 WHERE developer_name =?`, [developer.company.name]
@@ -65,7 +59,7 @@ export async function insertDataIntoDB(gamesData) {
             if (developerData.length > 0) {
                 developerID = developerData[0].developer_id;
             } else {
-                const [developerResult] = await connection.query(
+                const [developerResult] = await pool.query(
                     `INSERT INTO Developers (developer_name) VALUES (?)`, [developer.company.name]
                 );
                 developerID = developerResult.insertId;
@@ -75,7 +69,7 @@ export async function insertDataIntoDB(gamesData) {
         //INSERT INTO Publishers
         const publisher = game.involved_companies.find(company => company.publisher);
         if (publisher) {
-            const [publisherData] = await connection.query(
+            const [publisherData] = await pool.query(
                 `SELECT publisher_id 
                 FROM Publishers
                 WHERE publisher_name =?`, [publisher.company.name]
@@ -83,7 +77,7 @@ export async function insertDataIntoDB(gamesData) {
             if (publisherData.length > 0) {         
                 publisherID = publisherData[0].publisher_id;
             } else {
-                const [publisherResult] = await connection.query(
+                const [publisherResult] = await pool.query(
                     `INSERT INTO Publishers (publisher_name) VALUES (?)`, [publisher.company.name]
                 );
                 publisherID = publisherResult.insertId;
@@ -91,7 +85,7 @@ export async function insertDataIntoDB(gamesData) {
         }
 
         //INSERT INTO Games
-        const [gameData] = await connection.query(
+        const [gameData] = await pool.query(
             `INSERT INTO Games (developer_id, publisher_id, game_title, game_description, game_release_date, game_image_url)
             VALUES (?,?,?,?,?,?)`,
             [
@@ -107,7 +101,7 @@ export async function insertDataIntoDB(gamesData) {
 
         //INSERT INTO Platforms
         for (const platform of game.platforms) {
-            const [platformData] = await connection.query(
+            const [platformData] = await pool.query(
                 `SELECT platform_id
                 FROM Platforms
                 WHERE platform_name =?`, [platform.name]
@@ -115,7 +109,7 @@ export async function insertDataIntoDB(gamesData) {
             if (platformData.length > 0) {     
                 platformID = platformData[0].platform_id;    
             } else {
-                const [platformResult] = await connection.query(
+                const [platformResult] = await pool.query(
                     `INSERT INTO Platforms (platform_name) VALUE (?)`, [platform.name]
                 );
                 platformID = platformResult.insertId;
@@ -123,13 +117,13 @@ export async function insertDataIntoDB(gamesData) {
         }
 
         //INSERT INTO GamePlatform
-        await connection.query(
+        await pool.query(
             `INSERT INTO GamePlatform (game_id, platform_id) VALUES (?, ?)`, [gameID, platformID]
         );
 
         //INSERT INTO Genres
         for (const genre of game.genres) {
-            const [genreData] = await connection.query(
+            const [genreData] = await pool.query(
                 `SELECT genre_id
                 FROM Genres
                 WHERE genre_name =?`, [genre.name]
@@ -137,7 +131,7 @@ export async function insertDataIntoDB(gamesData) {
             if (genreData.length > 0) {          
                 genreID = genreData[0].genre_id;    
             } else {
-                const [genreResult] = await connection.query(
+                const [genreResult] = await pool.query(
                     `INSERT INTO Genres (genre_name) VALUE (?)`, [genre.name]
                 );
                 genreID = genreResult.insertId;
@@ -145,7 +139,7 @@ export async function insertDataIntoDB(gamesData) {
         }
 
         //INSERT INTO GameGenre
-        await connection.query(
+        await pool.query(
             `INSERT INTO GameGenre (game_id, genre_id) VALUES (?, ?)`, [gameID, genreID]
         );
     }

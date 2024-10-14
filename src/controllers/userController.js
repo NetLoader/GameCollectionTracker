@@ -1,12 +1,5 @@
-import mysql from "mysql2/promise";
+import pool from "../database/dbConnection.js";
 import bcrypt from "bcrypt";
-
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-});
 
 export async function getUsers(limit, offset) {
     try {
@@ -38,6 +31,18 @@ export async function getUserByID(userID) {
         throw error;
     }
 };
+
+export async function getUserByEmail(userEmail) {
+    try {
+        const [user] = await pool.query(`
+            SELECT *
+            FROM Users
+            WHERE user_email = ?`, [userEmail]);
+    } catch (error) {
+        console.error("Error fetching users by email from controller: ", error);
+        throw error;
+    }
+}
 
 export async function createUser(userData) {
     try {

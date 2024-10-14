@@ -1,11 +1,4 @@
-import mysql from "mysql2/promise";
-
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-});
+import pool from "../database/dbConnection.js";
 
 //NOTE: use this to display on homepage (~10 games at a time, when the user click "show more" fetch the next 10)
 export async function getGames(limit, offset) {

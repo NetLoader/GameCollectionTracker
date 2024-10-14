@@ -68,8 +68,8 @@ export async function dbSetup() {
     //GamePlatform Table
     await connection.query(`
         CREATE TABLE IF NOT EXISTS GamePlatform(
-            game_id INT,
-            platform_id INT,
+            game_id INT NOT NULL,
+            platform_id INT NOT NULL,
             PRIMARY KEY (game_id, platform_id),
             FOREIGN KEY (game_id) REFERENCES Games(game_id),
             FOREIGN KEY (platform_id) REFERENCES Platforms(platform_id)
@@ -87,20 +87,23 @@ export async function dbSetup() {
     //GameGenre Table
     await connection.query(`
         CREATE TABLE IF NOT EXISTS GameGenre(
-            game_id INT,
-            genre_id INT,
+            game_id INT NOT NULL,
+            genre_id INT NOT NULL,
             PRIMARY KEY (game_id, genre_id),
             FOREIGN KEY (game_id) REFERENCES Games(game_id),
             FOREIGN KEY (genre_id) REFERENCES Genres(genre_id)
         );
     `);
 
-    //UserGames Table
+    //UserCollection Table
     await connection.query(`
-        CREATE TABLE IF NOT EXISTS UserGames(
-            user_id INT,
-            game_id INT,
-            status ENUM('Completed', 'Playing', 'Dropped', 'Plan to Play') DEFAULT 'Playing'
+        CREATE TABLE IF NOT EXISTS UserCollection(
+            user_collection_id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            game_id INT NOT NULL,
+            status ENUM('Completed', 'Playing', 'Dropped', 'Plan to Play') NOT NULL DEFAULT 'Playing',
+            FOREIGN KEY (user_id) REFERENCES Users(user_id),
+            FOREIGN KEY (game_id) REFERENCES Games(game_id)
         );
     `);
 }

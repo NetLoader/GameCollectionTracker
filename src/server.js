@@ -8,6 +8,7 @@ import publisherRoutes from "./routes/publisherRoutes.js";
 import genreRoutes from "./routes/genreRoutes.js";
 import platformRoutes from "./routes/platformRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import userCollectionRoutes from "./routes/userCollectionRoutes.js"
 
 
 const PORT = process.env.PORT;
@@ -47,5 +48,6 @@ app.use("/publishers", publisherRoutes);
 app.use("/genres", genreRoutes);
 app.use("/platforms", platformRoutes);
 app.use("/users", userRoutes);
+app.use("/userCollections", userCollectionRoutes);
 
 app.listen(PORT, () => console.log(`Server is running on ${PORT}`));

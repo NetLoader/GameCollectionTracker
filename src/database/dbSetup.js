@@ -102,7 +102,7 @@ export async function dbSetup() {
             user_id INT NOT NULL,
             game_id INT NOT NULL,
             status ENUM('Completed', 'Playing', 'Dropped', 'Plan to Play') NOT NULL DEFAULT 'Playing',
-            FOREIGN KEY (user_id) REFERENCES Users(user_id),
+            FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
             FOREIGN KEY (game_id) REFERENCES Games(game_id)
         );
     `);

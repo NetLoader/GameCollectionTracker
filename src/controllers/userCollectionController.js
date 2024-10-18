@@ -9,12 +9,14 @@ export async function addGameToCollection(data) {
             FROM UserCollection 
             WHERE user_id = ? AND game_id = ?`, [userID, gameID]);
         if (checkCollection.length > 0) {
-            return { messsage: "Game already in user's collection"}
+            return { success: false, message: "Game already in user's collection"};
         }
-
-        const [result] = await pool.query(`
-            INSERT INTO UserCollection (user_id, game_id, status) VALUES (?, ?, ?)`, [userID, gameID, status]);
-        return (result.affectedRows > 0);
+        const [result] = await pool.query(`INSERT INTO UserCollection (user_id, game_id, status) VALUES (?, ?, ?)`, [userID, gameID, status]);
+        if (result.affectedRows > 0) {
+            return {success: true, message: "Game added to collection"};
+        } else {
+            return {success: false, message: "Failed to add game to collection"};
+        }
     } catch (error) {
         console.error("Error adding game to collection from controller: ", error);
         throw error;

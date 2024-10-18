@@ -26,10 +26,10 @@ router.get("/", async (req, res) => {
         } else if (contentType == "platform") {
             result = await getPlatformsByName(contentName);
             res.status(200).json(result);
-        } else if (contentType == "gamebygenre") {
+        } else if (contentType == "gameByGenre") {
             result = await getGameByGenre(contentName);
             res.status(200).json(result);
-        } else if (contentType == "gamebyplatform"){
+        } else if (contentType == "gameByPlatform"){
             result = await getGameByPlatform(contentName);
             res.status(200).json(result);
         } else {

@@ -6,10 +6,10 @@ const router = express.Router();
 router.post("/", async (req, res) => {
     try {
         const result = await addGameToCollection(req.body);
-        if (result) {
-            res.status(200).json({message: "Game added to collection"});
+        if (result.success) {
+            res.status(200).json({message: result.message});
         } else {
-            res.status(404).json({message: "user_id and game_id not found"});
+            res.status(400).json({message: result.message});
         }
     } catch (error) {
         res.status(500).json({message: "Error adding game to user's collection", error});

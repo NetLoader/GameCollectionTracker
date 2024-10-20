@@ -12,6 +12,7 @@ The Game Collection Tracker is a web-based application that helps gamers easily 
 ## Technologies
 - Frontend:
   - React.js
+  - Tailwind CSS
 - Backend:
   - Node.js
   - Express.js

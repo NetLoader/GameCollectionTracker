@@ -38,6 +38,11 @@ export async function getUserByEmail(userEmail) {
             SELECT *
             FROM Users
             WHERE user_email = ?`, [userEmail]);
+        if (user.length > 0) {
+            return user[0];
+        } else {
+            return null;
+        }
     } catch (error) {
         console.error("Error fetching users by email from controller: ", error);
         throw error;

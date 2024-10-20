@@ -106,4 +106,14 @@ export async function dbSetup() {
             FOREIGN KEY (game_id) REFERENCES Games(game_id)
         );
     `);
+
+    //RefreshToken Table
+    await connection.query(`
+        CREATE TABLE IF NOT EXISTS RefreshToken(
+            refresh_token_id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            refresh_token TEXT NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+        );    
+    `);
 }

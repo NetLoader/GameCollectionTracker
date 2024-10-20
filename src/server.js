@@ -41,13 +41,13 @@ app.get("/fetchGamesFromIGDB", async (req, res) => {
 });
 
 //Routers
-app.use("/search", searchRoutes);
-app.use("/games", gameRoutes);
-app.use("/developers", developerRoutes);
-app.use("/publishers", publisherRoutes);
-app.use("/genres", genreRoutes);
-app.use("/platforms", platformRoutes);
-app.use("/users", userRoutes);
-app.use("/userCollections", userCollectionRoutes);
+app.use("/api/search", searchRoutes);
+app.use("/api/games", gameRoutes);
+app.use("/api/developers", developerRoutes);
+app.use("/api/publishers", publisherRoutes);
+app.use("/api/genres", genreRoutes);
+app.use("/api/platforms", platformRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/userCollections", userCollectionRoutes);
 
 app.listen(PORT, () => console.log(`Server is running on ${PORT}`));

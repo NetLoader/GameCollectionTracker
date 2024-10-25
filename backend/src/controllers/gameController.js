@@ -32,4 +32,46 @@ export async function getGameByID(gameID) {
     }
 }
 
+export async function getGameGenresByID(gameID) {
+    try {
+        const [genres] = await pool.query(`
+            SELECT g.game_id, g.game_title, gr.genre_id, gr.genre_name
+            FROM GameGenre gg
+            INNER JOIN Games g 
+            ON gg.game_id = g.game_id
+            INNER JOIN Genres gr 
+            ON gg.genre_id = gr.genre_id
+            WHERE g.game_id = ?
+        `, [gameID])
+        if (genres.length > 0) {
+            return genres;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching game genres from controller: ", error);
+        throw error;
+    }
+}
 
+export async function getGamePlatformsByID(gameID) {
+    try {
+        const [platforms] = await pool.query(`
+            SELECT g.game_id, g.game_title, p.platform_id, p.platform_name
+            FROM GamePlatform gp
+            INNER JOIN Games g
+            ON gp.game_id = g.game_id
+            INNER JOIN Platforms p
+            ON gp.platform_id = p.platform_id
+            WHERE g.game_id = ?   
+        `, [gameID]);
+        if (platforms.length > 0) {
+            return platforms;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching game platforms from controller: ", error);
+        throw error;
+    }
+}

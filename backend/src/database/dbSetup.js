@@ -49,6 +49,7 @@ export async function dbSetup() {
             publisher_id INT, 
             game_title VARCHAR(255),
             game_description TEXT,
+            game_story TEXT,
             game_release_date DATE,
             game_average_time VARCHAR(255),
             game_image_url VARCHAR(255),

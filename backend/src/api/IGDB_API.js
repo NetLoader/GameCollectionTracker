@@ -16,12 +16,12 @@ export async function fetchGamesData() {
     const accessToken = await getAccessToken();
     const response = await axios.post(
         "https://api.igdb.com/v4/games",
-        `fields name, summary, first_release_date, genres.name, platforms.name, cover.image_id, rating, aggregated_rating, 
+        `fields name, summary, storyline, first_release_date, genres.name, platforms.name, cover.image_id, rating, aggregated_rating, hypes, 
         involved_companies.company.name, involved_companies.publisher, involved_companies.developer;
-        sort aggregated_rating desc;
-        where rating >= 90 
+        sort hypes desc;
+        where aggregated_rating >= 90 
             & category = 0
-            & first_release_date >= 946702800
+            & first_release_date >= 1262322000
             & platforms != (34, 39)
             & platforms != null
             & involved_companies != null
@@ -86,13 +86,14 @@ export async function insertDataIntoDB(gamesData) {
 
         //INSERT INTO Games
         const [gameData] = await pool.query(
-            `INSERT INTO Games (developer_id, publisher_id, game_title, game_description, game_release_date, game_image_url)
-            VALUES (?,?,?,?,?,?)`,
+            `INSERT INTO Games (developer_id, publisher_id, game_title, game_description, game_story, game_release_date, game_image_url)
+            VALUES (?,?,?,?,?,?,?)`,
             [
                 developerID,
                 publisherID,
                 game.name,
                 game.summary,
+                game.storyline,
                 new Date(game.first_release_date * 1000),
                 game.cover ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg` : null
             ] 
@@ -116,11 +117,6 @@ export async function insertDataIntoDB(gamesData) {
             }
         }
 
-        //INSERT INTO GamePlatform
-        await pool.query(
-            `INSERT INTO GamePlatform (game_id, platform_id) VALUES (?, ?)`, [gameID, platformID]
-        );
-
         //INSERT INTO Genres
         for (const genre of game.genres) {
             const [genreData] = await pool.query(
@@ -139,8 +135,56 @@ export async function insertDataIntoDB(gamesData) {
         }
 
         //INSERT INTO GameGenre
-        await pool.query(
-            `INSERT INTO GameGenre (game_id, genre_id) VALUES (?, ?)`, [gameID, genreID]
-        );
+        for (const genre of game.genres) {
+            const [genreData] = await pool.query(`
+                SELECT genre_id
+                FROM Genres
+                WHERE genre_name = ?    
+            `, [genre.name]);
+            if (genreData.length > 0) {
+                genreID = genreData[0].genre_id;
+            } else {
+                const genreResult = await pool.query(`
+                    INSERT INTO Genres (genre_name) VALUE (?)    
+                `, [genre.name]);
+                genreID = genreResult.insertId;
+            }
+            const [genreData2] = await pool.query(`
+                SELECT * FROM GameGenre
+                WHERE game_id = ? AND genre_id = ?    
+            `, [gameID, genreID]);
+            if (genreData2.length === 0) {
+                await pool.query(`
+                    INSERT INTO GameGenre (game_id, genre_id) VALUES (?, ?)    
+                `, [gameID, genreID]);
+            }
+        }
+
+        
+        //INSERT INTO GamePlatform
+        for (const platform of game.platforms) {
+            const [platData] = await pool.query(`
+                SELECT platform_id
+                FROM Platforms
+                WHERE platform_name = ?    
+            `, [platform.name]);
+            if (platData.length > 0) {
+                platformID = platData[0].platform_id;
+            } else {
+                const platResult = await pool.query(`
+                    INSERT INTO Platforms (platform_name) VALUE (?)    
+                `, [platform.name]);
+                platformID = platResult.insertId;
+            }
+            const [platData2] = await pool.query(`
+                SELECT * FROM GamePlatform
+                WHERE game_id = ? AND platform_id = ?    
+            `, [gameID, platformID]);
+            if (platData2.length === 0) {
+                await pool.query(`
+                    INSERT INTO GamePlatform (game_id, platform_id) VALUES (?, ?)    
+                `, [gameID, platformID]);
+            }
+        }
     }
 }

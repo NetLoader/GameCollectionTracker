@@ -31,7 +31,7 @@ initDatabase();
 
 //fetch data from IGDB and insert them into db
 // Comment this block out after fetching the data so that normal user cannot access this endpoint
-app.get("/fetchGamesFromIGDB", async (req, res) => {
+app.get("/api/fetchGamesFromIGDB", async (req, res) => {
     try {
         const gamesData = await fetchGamesData(); 
         await insertDataIntoDB(gamesData);

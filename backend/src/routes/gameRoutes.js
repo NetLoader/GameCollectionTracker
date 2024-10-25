@@ -1,5 +1,5 @@
 import express from "express";
-import {getGameByID, getGames} from "../controllers/gameController.js"
+import {getGameByID, getGameGenresByID, getGamePlatformsByID, getGames} from "../controllers/gameController.js"
 const router = express.Router();
 
 //getGames
@@ -31,6 +31,37 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+//getGameGenresByID
+// @ex: /games/12/genres
+router.get("/:id/genres", async (req, res) => {
+    try {
+        const gameID = req.params.id;
+        const genres = await getGameGenresByID(gameID)
+        if (genres) {
+            res.json(genres)
+        } else {
+            res.status(404).json({message: "Genres not found"})
+        }
+    } catch (error) {
+        res.status(500).json({message: "Error fetching game genres by id", error});
+    }
+})
+
+//getGamePlatformsByID
+// @ex: /games/12/platforms
+router.get("/:id/platforms", async (req, res) => {
+    try {
+        const gameID = req.params.id;
+        const platforms = await getGamePlatformsByID(gameID);
+        if (platforms) {
+            res.json(platforms)
+        } else {
+            res.status(404).json({message: "Platforms not found"})
+        }
+    } catch (error) {
+        res.status(500).json({message: "Error fetching game platforms by id", error});
+    }
+})
 
 
 export default router;

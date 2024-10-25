@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 //getDevelopersByID
-router.get("/", async (res, req) => {
+router.get("/:id", async (req, res) => {
     try {
         const devID = req.params.id;
         const developers = await getDevelopersByID(devID);

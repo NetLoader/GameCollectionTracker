@@ -30,3 +30,23 @@ export async function getGenreByID(genreID) {
         throw error;
     }
 }
+
+export async function getGenreGamesByID(genreID) {
+    try {
+        const [games] = await pool.query(`
+            SELECT g.game_id, g.game_title, gr.genre_id, gr.genre_name, g.game_image_url
+            FROM Games g
+            INNER JOIN GameGenre gg ON g.game_id = gg.game_id
+            INNER JOIN Genres gr ON gg.genre_id = gr.genre_id
+            WHERE gr.genre_id = ?
+        `, [genreID])
+        if (games.length > 0) {
+            return games;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching genre's games by id from controller: ", error);
+        throw error;
+    }
+}

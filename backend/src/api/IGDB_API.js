@@ -16,7 +16,7 @@ export async function fetchGamesData() {
     const accessToken = await getAccessToken();
     const response = await axios.post(
         "https://api.igdb.com/v4/games",
-        `fields name, summary, storyline, first_release_date, genres.name, platforms.name, cover.image_id, rating, aggregated_rating, hypes, 
+        `fields name, summary, storyline, first_release_date, genres.name, platforms.name, cover.image_id, screenshots.image_id, rating, aggregated_rating, hypes, 
         involved_companies.company.name, involved_companies.publisher, involved_companies.developer;
         sort hypes desc;
         where aggregated_rating >= 90 
@@ -100,6 +100,14 @@ export async function insertDataIntoDB(gamesData) {
         ); 
         gameID = gameData.insertId;
 
+        //INSERT INTO GameScreenshots
+        for (const screenshot of game.screenshots) {
+            const screenshotURL = `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.jpg`
+            await pool.query(`
+                INSERT INTO GameScreenshots (game_id, game_screenshots_url) VALUES (?, ?)
+            `, [gameID, screenshotURL]);
+        }
+
         //INSERT INTO Platforms
         for (const platform of game.platforms) {
             const [platformData] = await pool.query(
@@ -160,7 +168,6 @@ export async function insertDataIntoDB(gamesData) {
             }
         }
 
-        
         //INSERT INTO GamePlatform
         for (const platform of game.platforms) {
             const [platData] = await pool.query(`
@@ -185,6 +192,6 @@ export async function insertDataIntoDB(gamesData) {
                     INSERT INTO GamePlatform (game_id, platform_id) VALUES (?, ?)    
                 `, [gameID, platformID]);
             }
-        }
+        }        
     }
 }

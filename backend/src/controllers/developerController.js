@@ -30,3 +30,23 @@ export async function getDevelopersByID(devID) {
         throw error;
     }
 }
+
+export async function getDeveloperGamesByID(devID) {
+    try {
+        const [games] = await pool.query(`
+            SELECT g.game_id, g.game_title, d.developer_id, d.developer_name, g.game_image_url
+            FROM Games g
+            INNER JOIN Developers d
+            ON g.developer_id = d.developer_id
+            WHERE g.developer_id = ?    
+        `, [devID]);
+        if (games.length > 0) {
+            return games;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching developer's games by id from controller: ", error);
+        throw error;
+    }
+}

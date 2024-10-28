@@ -51,41 +51,6 @@ export async function getPublishersByName(publisherName) {
     }
 };
 
-export async function getGenresByName(genreName) {
-    try {
-        const [genre] = await pool.query(`
-            SELECT * 
-            FROM Genres 
-            WHERE genre_name LIKE ?`, [`%${genreName}%`]);
-        if (genre.length > 0) {
-            return genre;
-        } else {
-            return null;
-        }
-    } catch (error) {
-        console.error("Error fetching genre by name from controller: ", error);
-        throw error;
-    }
-};
-
-export async function getPlatformsByName(platformName) {
-    try {
-        const [platform] = await pool.query(`
-            SELECT * 
-            FROM Platforms 
-            WHERE platform_name LIKE ?`, [`%${platformName}%`]);
-        if (platform.length > 0) {
-            return platform;
-        } else {
-            return null;
-        }
-    } catch (error) {
-        console.error("Error fetching platform by name from controller: ", error);
-        throw error;
-    }
-};
-
-// @note: for the frontend, when searching, use the game_id to redirect page (when clicked), and only show the game_title on the search result
 export async function getGameByGenre(genreName) {
     try {
         const [result] = await pool.query(`

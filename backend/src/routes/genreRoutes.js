@@ -1,5 +1,5 @@
 import express from "express";
-import { getGenres, getGenreByID } from "../controllers/genreController.js"
+import { getGenres, getGenreByID, getGenreGamesByID } from "../controllers/genreController.js"
 const router = express.Router();
 
 //getGenres
@@ -31,5 +31,20 @@ router.get("/:id", async (req, res) => {
         res.status(500).json({message: "Error fetching genre by id", error});
     }
 });
+
+//getGenreGamesByID
+router.get("/:id/games", async (req, res) => {
+    try {
+        const genreID = req.params.id;
+        const games = await getGenreGamesByID(genreID);
+        if (games) {
+            res.json(games);
+        } else {
+            res.status(404).json({message: "Genre not found"})
+        }
+    } catch (error) {
+        res.status(500).json({message: "Error fetching genre's games by id", error});
+    }
+})
 
 export default router;

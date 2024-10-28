@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import GameInfoCard from '../components/GameInfoCard';
 
 const GameInfoPage = () => {
@@ -66,6 +67,11 @@ const GameInfoPage = () => {
             gameName={game.game_title}
             imageURL={game.game_image_url}
           />
+          <div className='pt-5'>
+            <button className='rounded bg-gray-800 p-2 font-bold border border-gray-700'>
+              Add to
+            </button>
+          </div>
         </div>
         <div className='flex flex-col w-2/3'>
           <div>
@@ -74,10 +80,23 @@ const GameInfoPage = () => {
           <div className='flex flex-row space-x-5 pt-5'>
             <div className='flex flex-col w-1/2'>
               <p>Release Date: {new Date(game.game_release_date).toLocaleDateString()}</p>
-              <p>Developer: {developer ? developer.developer_name : publisher.publisher_name}</p>
-              <p>Publisher: {publisher ? publisher.publisher_name : developer.developer_name}</p>
-              <p>Genre: {genre.map(genre => (
-                <span key={genre.genre_id}>{genre.genre_name}, </span>
+              <p>Developer: {developer ? (
+                <Link to={`/developer/${developer.developer_id}`} className='text-blue-400 underline'>{developer.developer_name}</Link>
+              ) : (
+                <Link to={`/publisher/${publisher.publisher_id}`} className='text-blue-400 underline'>{publisher.publisher_name}</Link>
+              )}</p>
+              <p>Publisher: {publisher ? (
+                <Link to={`/publisher/${publisher.publisher_id}`} className='text-blue-400 underline'>{publisher.publisher_name}</Link>
+              ) : (
+                <Link to={`/developer/${developer.developer_id}`} className='text-blue-400 underline'>{developer.developer_name}</Link>
+              )}</p>
+              <p>Genre: {genre.map((genre) => (
+                <span key={genre.genre_id}>
+                  <Link to={`/genre/${genre.genre_id}`} className='text-blue-400 underline'>
+                    {genre.genre_name}
+                  </Link>
+                  {', '}
+                </span>
               ))}</p>
             </div>
             <div className='flex flex-col w-1/2'>

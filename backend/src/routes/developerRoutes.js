@@ -1,5 +1,5 @@
 import express from "express";
-import { getDevelopers, getDevelopersByID } from "../controllers/developerController.js";
+import { getDeveloperGamesByID, getDevelopers, getDevelopersByID } from "../controllers/developerController.js";
 const router = express.Router();
 
 //getDevelopers
@@ -27,6 +27,21 @@ router.get("/:id", async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({message: "Error fetching developers by ID", error});
+    }
+});
+
+//getDeveloperGamesByID
+router.get("/:id/games", async (req, res) => {
+    try {
+        const devID = req.params.id;
+        const games = await getDeveloperGamesByID(devID);
+        if (games) {
+            res.json(games)
+        } else {
+            res.status(404).json({message: "Developer not found"})
+        }
+    } catch (error) {
+        res.status(500).json({message: "Error fetching developer's games by ID", error});
     }
 });
 

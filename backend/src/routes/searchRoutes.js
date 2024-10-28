@@ -1,5 +1,5 @@
 import express from "express";
-import { getGamesByName, getDevelopersByName, getPublishersByName, getGenresByName, getPlatformsByName, getGameByGenre, getGameByPlatform } from "../controllers/searchController.js"
+import { getGamesByName, getDevelopersByName, getPublishersByName, getGameByGenre, getGameByPlatform } from "../controllers/searchController.js"
 
 const router = express.Router();
 
@@ -21,15 +21,9 @@ router.get("/", async (req, res) => {
             result = await getPublishersByName(contentName);
             res.status(200).json(result);
         } else if (contentType == "genre") {
-            result = await getGenresByName(contentName);
-            res.status(200).json(result);
-        } else if (contentType == "platform") {
-            result = await getPlatformsByName(contentName);
-            res.status(200).json(result);
-        } else if (contentType == "gameByGenre") {
             result = await getGameByGenre(contentName);
             res.status(200).json(result);
-        } else if (contentType == "gameByPlatform"){
+        } else if (contentType == "platform"){
             result = await getGameByPlatform(contentName);
             res.status(200).json(result);
         } else {

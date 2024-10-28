@@ -58,6 +58,16 @@ export async function dbSetup() {
         );
     `);
 
+    //GameScreenshots
+    await connection.query(`
+        CREATE TABLE IF NOT EXISTS GameScreenshots(
+            screenshot_id INT AUTO_INCREMENT PRIMARY KEY,
+            game_id INT NOT NULL,
+            game_screenshots_url VARCHAR(255),
+            FOREIGN KEY (game_id) REFERENCES Games(game_id)
+        );   
+    `);
+
     //Platforms Table 
     await connection.query(`
         CREATE TABLE IF NOT EXISTS Platforms(

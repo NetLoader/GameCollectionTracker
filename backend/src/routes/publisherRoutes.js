@@ -1,5 +1,5 @@
 import express from "express";
-import { getPublishers, getPublisherByID } from "../controllers/publisherController.js";
+import { getPublishers, getPublisherByID, getPublisherGamesByID } from "../controllers/publisherController.js";
 const router = express.Router();
 
 //getPublishers
@@ -31,5 +31,20 @@ router.get("/:id", async (req, res) => {
         res.status(500).json({message: "Error fetching publisher by id", error});
     }
 });
+
+//getPublisherGamesByID
+router.get("/:id/games", async (req, res) => {
+    try {
+        const publisherID = req.params.id;
+        const games = await getPublisherGamesByID(publisherID);
+        if (games) {
+            res.json(games)
+        } else {
+            res.status(404).json({message: "Publisher not found"})
+        }
+    } catch (error) {
+        res.status(500).json({message: "Error fetching publisher games by id", error});
+    }
+})
 
 export default router;

@@ -30,3 +30,22 @@ export async function getPublisherByID(publisherID) {
         throw error;
     }
 }
+
+export async function getPublisherGamesByID(publisherID) {
+    try {
+        const [games] = await pool.query(`
+            SELECT g.game_id, g.game_title, p.publisher_id, p.publisher_name, g.game_image_url
+            FROM Games g
+            INNER JOIN Publishers p
+            ON g.publisher_id = p.publisher_id
+            WHERE g.publisher_id = ?    
+        `, [publisherID]);
+        if (games.length > 0) {
+            return games;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        
+    }
+}

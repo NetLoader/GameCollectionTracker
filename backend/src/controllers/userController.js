@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 export async function getUsers(limit, offset) {
     try {
         const [users] = await pool.query(`
-            SELECT user_id, username, user_email
+            SELECT *
             FROM Users 
             ORDER BY user_id 
             LIMIT ? OFFSET ?`, [limit, offset]);
@@ -18,7 +18,7 @@ export async function getUsers(limit, offset) {
 export async function getUserByID(userID) {
     try {
         const [user] = await pool.query(`
-            SELECT user_id, username, user_email
+            SELECT *
             FROM Users
             WHERE user_id = ?`, [userID]);
         if (user.length > 0) {
@@ -49,12 +49,11 @@ export async function getUserByEmail(userEmail) {
     }
 }
 
-export async function createUser(userData) {
+export async function createUser(username, email, password) {
     try {
-        const {username, user_email, user_password} = userData;
-        const hashedPassword = await bcrypt.hash(user_password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
         const [user] = await pool.query(`
-            INSERT INTO Users (username, user_email, user_password_hash) VALUES (?, ?, ?)`, [username, user_email, hashedPassword]);
+            INSERT INTO Users (username, user_email, user_password_hash) VALUES (?, ?, ?)`, [username, email, hashedPassword]);
         return (user.affectedRows > 0);
     } catch (error) {
         console.error("Error creating user from controller: ", error);
@@ -62,14 +61,13 @@ export async function createUser(userData) {
     }
 };
 
-export async function updateUser(userData, userID) {
+export async function updateUserPassword(userID, newPassword) {
     try {
-        const {username, user_email, user_password} = userData;
-        const hashedPassword = await bcrypt.hash(user_password, 10);
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
         const [user] = await pool.query(`
             UPDATE Users
-            SET username = ?, user_email = ?, user_password_hash = ?
-            WHERE user_id = ?`, [username, user_email, hashedPassword, userID]);
+            SET user_password_hash = ?
+            WHERE user_id = ?`, [hashedNewPassword, userID]);
         return (user.affectedRows > 0);
     } catch (error) {
         console.error("Error updating user from controller: ", error);

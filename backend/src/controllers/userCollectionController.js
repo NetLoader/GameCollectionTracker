@@ -1,13 +1,12 @@
 import pool from "../database/dbConnection.js";
 
-export async function addGameToCollection(data) {
+export async function addGameToCollection(userID, gameID, status) {
     try {
-        const {userID, gameID, status} = data;
-
         const [checkCollection] = await pool.query(`
             SELECT * 
             FROM UserCollection 
-            WHERE user_id = ? AND game_id = ?`, [userID, gameID]);
+            WHERE user_id = ? AND game_id = ?
+        `, [userID, gameID]);
         if (checkCollection.length > 0) {
             return { success: false, message: "Game already in user's collection"};
         }
@@ -23,9 +22,13 @@ export async function addGameToCollection(data) {
     }
 };
 
-export async function deleteGameFromCollection(userCollectionID) {
+export async function deleteGameFromCollection(userID, gameID) {
     try {
-        const [result] = await pool.query(`DELETE FROM UserCollection WHERE user_collection_id = ?`, [userCollectionID]);
+        const [result] = await pool.query(`
+            DELETE 
+            FROM UserCollection 
+            WHERE user_id = ? AND game_id = ?
+        `, [userID, gameID]);
         return (result.affectedRows > 0); 
     } catch (error) {
         console.error("Error deleting game from collection from controller: ", error);
@@ -33,12 +36,13 @@ export async function deleteGameFromCollection(userCollectionID) {
     }
 };
 
-export async function updateGameStatus (userCollectionID, status) {
+export async function updateGameStatus (userID, gameID, status) {
     try {
         const [result] = await pool.query(`
             UPDATE UserCollection
             SET status = ?
-            WHERE user_collection_id = ?`, [status, userCollectionID]);
+            WHERE user_id = ? AND game_id = ?
+        `, [status, userID, gameID]);
         return (result.affectedRows > 0);
     } catch (error) {
         console.error("Error updating game status from controller: ", error);
@@ -49,10 +53,11 @@ export async function updateGameStatus (userCollectionID, status) {
 export async function getUserCollection(userID) {
     try {
         const [result] = await pool.query(`
-            SELECT uc.user_id, g.game_title, uc.status
+            SELECT uc.user_id, uc.game_id, uc.status, g.game_title
             FROM UserCollection uc
             JOIN Games g ON uc.game_id = g.game_id
-            WHERE uc.user_id = ?`, [userID]);
+            WHERE uc.user_id = ?
+        `, [userID]);
         return result;
     } catch (error) {
         console.error("Error fetching user's collection from controller: ", error);

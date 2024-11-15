@@ -10,7 +10,7 @@ import genreRoutes from "./routes/genreRoutes.js";
 import platformRoutes from "./routes/platformRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import userCollectionRoutes from "./routes/userCollectionRoutes.js"
-
+import authRoutes from "./routes/authRoutes.js"
 
 const PORT = process.env.PORT;
 const app = express();
@@ -51,5 +51,6 @@ app.use("/api/genres", genreRoutes);
 app.use("/api/platforms", platformRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/userCollections", userCollectionRoutes);
+app.use("/api/auth",authRoutes);
 
 app.listen(PORT, () => console.log(`Server is running on ${PORT}`));

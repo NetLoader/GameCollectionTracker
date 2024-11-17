@@ -40,6 +40,7 @@ const GenrePage = () => {
                 <div className='flex flex-wrap justify-center gap-10 p-10'>
                     {games.map((game) => (
                     <GameCard
+                        key={game.game_id}
                         gameID={game.game_id}
                         gameName={game.game_title}
                         imageURL={game.game_image_url}

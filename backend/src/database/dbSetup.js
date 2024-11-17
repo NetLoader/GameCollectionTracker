@@ -18,7 +18,7 @@ export async function dbSetup() {
     await connection.query(`
         CREATE TABLE IF NOT EXISTS Users(
             user_id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(255) UNIQUE NOT NULL,
+            username VARCHAR(255) NOT NULL,
             user_email VARCHAR(255) UNIQUE NOT NULL,
             user_password_hash VARCHAR(255) NOT NULL,
             user_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -109,12 +109,12 @@ export async function dbSetup() {
     //UserCollection Table
     await connection.query(`
         CREATE TABLE IF NOT EXISTS UserCollection(
-            user_collection_id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             game_id INT NOT NULL,
             status ENUM('Completed', 'Playing', 'Dropped', 'Plan to Play') NOT NULL DEFAULT 'Playing',
             FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-            FOREIGN KEY (game_id) REFERENCES Games(game_id)
+            FOREIGN KEY (game_id) REFERENCES Games(game_id),
+            PRIMARY KEY (user_id, game_id)
         );
     `);
 

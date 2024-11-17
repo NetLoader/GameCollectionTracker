@@ -100,9 +100,9 @@ const GameInfoPage = () => {
               ))}</p>
             </div>
             <div className='flex flex-col w-1/2'>
-              <p>Releases: {platform.map(platform => (
+              <h1>Releases: {platform.map(platform => (
                 <p key={platform.platform_id}>{platform.platform_name}</p>
-              ))}</p>
+              ))}</h1>
             </div>
           </div>
           <div className='pt-20'>

@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import GameInfoCard from '../components/GameInfoCard';
+import AddToButton from '../components/AddToButton';
 
-const GameInfoPage = () => {
+const GameInfoPage = ({isLoggedIn}) => {
   const {id} = useParams();
   const [game, setGame] = useState(null);
   const [developer, setDeveloper] = useState(null);
@@ -68,9 +69,7 @@ const GameInfoPage = () => {
             imageURL={game.game_image_url}
           />
           <div className='pt-5'>
-            <button className='rounded bg-gray-800 p-2 font-bold border border-gray-700'>
-              Add to
-            </button>
+            <AddToButton gameID={id} isLoggedIn={isLoggedIn}/>
           </div>
         </div>
         <div className='flex flex-col w-2/3'>

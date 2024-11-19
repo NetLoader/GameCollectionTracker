@@ -34,7 +34,7 @@ const NavBar = ({isLoggedIn, setIsLoggedIn}) => {
                         {dropDownOn && (
                             <div className="absolute right-3 mt-1 w-28 bg-gray-900 text-white border-2 border-gray-600 rounded shadow-lg z-50">
                                 <Link to="/profile" className="block px-4 py-2 hover:bg-gray-700 rounded">Profile</Link>
-                                <Link to="/settings" className="block px-4 py-2 hover:bg-gray-700 rounded">Settings</Link>
+                                <Link to="/setting" className="block px-4 py-2 hover:bg-gray-700 rounded">Settings</Link>
                                 <button onClick={logout} className="block px-4 py-2 font-bold text-red-600 hover:bg-gray-700 rounded w-full text-left">Logout</button>
                             </div>
                         )}

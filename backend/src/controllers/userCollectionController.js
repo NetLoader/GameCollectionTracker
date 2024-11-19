@@ -64,3 +64,17 @@ export async function getUserCollection(userID) {
         throw error;
     }
 };
+
+export async function checkUserCollection (userID, gameID) {
+    try {
+        const [result] = await pool.query(`
+            SELECT * 
+            FROM UserCollection 
+            WHERE user_id = ? AND game_id = ?
+        `, [userID, gameID]);
+        return (result.length > 0);
+    } catch (error) {
+        console.error("Error checking user's collection from controller: ", error);
+        throw error;
+    }
+}

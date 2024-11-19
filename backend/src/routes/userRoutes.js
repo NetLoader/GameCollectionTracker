@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
 //updateUserPassword
 router.put("/", authenticateToken, async (req, res) => {
     try {
-        const {userID, oldPassword, newPassword} = req.body;
+        const {userID, email, oldPassword, newPassword} = req.body;
         if (userID != req.user) {
             return res.status(403).json({message: `You are not authorized to update this user's data`});
         }
@@ -61,7 +61,11 @@ router.put("/", authenticateToken, async (req, res) => {
         const user = await getUserByID(userID);
         const verifyPassword = await bcrypt.compare(oldPassword, user.user_password_hash);
         if (!verifyPassword){
-            return res.status(401).json({message: "Invalid password"})
+            return res.status(400).json({message: "Invalid password or email"})
+        }
+
+        if (email !== user.user_email) {
+            return res.status(400).json({message: "Invalid password or email"})
         }
 
         const result = await updateUserPassword(userID, newPassword);

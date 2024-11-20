@@ -27,7 +27,7 @@ const HomePage = () => {
 
   return (
     <div className='container m-auto'>
-      <div className='flex flex-wrap justify-center gap-10 p-10'>
+      <div className='flex flex-wrap justify-center gap-5 p-5 sm:gap-10 sm:p-10'>
         {games.map((game) => (
           <GameCard
             key={game.game_id}

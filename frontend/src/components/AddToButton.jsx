@@ -1,26 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const AddToButton = ({gameID, isLoggedIn}) => {
     const [dropDown, setDropDown] = useState(false);
     const [message, setMessage] = useState('');
+    const [gameExist, setGameExist] = useState(false);
     const nav = useNavigate();
+    const userID = localStorage.getItem('userID');
+    const localAccessToken = localStorage.getItem('accessToken');
+    const localRefreshToken = localStorage.getItem('refreshToken');
+    let newAccessToken;
+
 
     const toggleDropDown = () => {
         setDropDown(!dropDown);
     }
 
-    const addGameToCollection = async (status) => {
-        const userID = localStorage.getItem('userID');
-        const localAccessToken = localStorage.getItem('accessToken');
-        const localRefreshToken = localStorage.getItem('refreshToken');
-        let response;
-        let newAccessToken;
-
-        try {
-            // check if game exist in user collection
-            response = await fetch(`/api/userCollections/${userID}/${gameID}`, {
+    useEffect(() => {
+        const checkGameInCollection = async () => {
+            const response = await fetch(`/api/userCollections/${userID}/${gameID}`, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`}
             })
@@ -38,8 +37,19 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                 }
             }
             const game = await response.json();
-            // if game in user collection, update game status
             if (game.exist) {
+                setGameExist(true);
+            } else {
+                setGameExist(false);
+            }
+        }
+        checkGameInCollection();
+    }, [gameExist])
+
+    const addGameToCollection = async (status) => {
+        let response;
+        try {
+            if (gameExist) {        // game exist, update the game status
                 response = await fetch('/api/userCollections', {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
@@ -60,6 +70,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                     body: JSON.stringify({userID, gameID, status}) 
                 })
                 if (response.ok) {
+                    setGameExist(true);
                     setMessage('Game added!');
                     setTimeout(() => setMessage(''), 2000);
                 } else {
@@ -67,6 +78,43 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                     console.error(errorMsg.message);
                     setTimeout(() => setMessage(''), 2000);
                 }
+            }
+        } catch (error) {
+            console.error("Error adding game to collection", error);
+        } finally {
+            setDropDown(false);
+        }
+    }
+
+    const deleteGameFromCollection = async () => {
+        let response;
+        try {
+            response = await fetch(`/api/userCollections/`, {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
+                body: JSON.stringify({userID, gameID}),
+            })
+            if (response.status === 403) {
+                newAccessToken = await refreshToken(localRefreshToken);
+                if (newAccessToken) {
+                    response = await fetch(`/api/userCollections/`, {
+                        method: 'DELETE',
+                        headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
+                        body: JSON.stringify({userID, gameID}),
+                    })
+                } else {
+                    alert('Session expired. Please log in again.');
+                    return;
+                }
+            }
+            if (response.ok) {
+                setGameExist(false);
+                setMessage('Game deleted from collection!');
+                setTimeout(() => setMessage(''), 2000);
+            } else {
+                const errorMsg = await response.json();
+                console.error(errorMsg.message);
+                setTimeout(() => setMessage(''), 2000);
             }
         } catch (error) {
             console.error("Error adding game to collection", error);
@@ -89,10 +137,11 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                     <button onClick={() => addGameToCollection('Playing')} className='block px-4 py-2 font-bold hover:bg-gray-700 rounded'>Playing</button>
                     <button onClick={() => addGameToCollection('Plan to Play')} className='block px-4 py-2 font-bold hover:bg-gray-700 rounded'>Plan to Play</button>
                     <button onClick={() => addGameToCollection('Dropped')} className='block px-4 py-2 font-bold hover:bg-gray-700 rounded'>Dropped</button>
+                    {gameExist ? <button onClick={deleteGameFromCollection} className='block px-4 py-2 font-bold bg-red-950 hover:bg-red-800 rounded'>Remove</button> : null}
                 </div>
             )}
 
-            {message && <p className="absolute w-44 whitespace-nowrap text-center font-bold text-emerald-400 mt-1 right-0 translate-x-14">{message}</p>}
+            {message && <p className="absolute w-44 text-center font-bold text-emerald-400 mt-1 right-0 translate-x-14">{message}</p>}
         </div>
     )
 }

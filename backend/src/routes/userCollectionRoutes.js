@@ -1,5 +1,5 @@
 import express from "express";
-import { addGameToCollection, checkUserCollection, deleteGameFromCollection, getUserCollection, updateGameStatus } from "../controllers/userCollectionController.js";
+import { addGameToCollection, checkUserCollection, deleteGameFromCollection, getUserCollection, getUserCollectionByStatus, updateGameStatus } from "../controllers/userCollectionController.js";
 import { authenticateToken } from "../middleware/authTokenMiddleware.js";
 
 const router = express.Router();
@@ -61,6 +61,21 @@ router.put("/", authenticateToken, async (req, res) => {
     }
 });
 
+// checkUserCollection
+router.get("/:userID/:gameID", authenticateToken, async (req, res) => {
+    try {
+        const {userID, gameID} = req.params;
+        if (userID != req.user) {
+            return res.status(403).json({message: "You are not authorized to access this user's data"});
+        }
+
+        const result = await checkUserCollection(userID, gameID);
+        return res.json({exist: result});
+    } catch (error) {
+        res.status(500).json({message: "Error checking user's collection", error});
+    }
+})
+
 // getUserCollection
 router.get("/:id", authenticateToken, async (req, res) => {
     try {
@@ -80,19 +95,22 @@ router.get("/:id", authenticateToken, async (req, res) => {
     }
 });
 
-// checkUserCollection
-router.get("/:userID/:gameID", authenticateToken, async (req, res) => {
+router.get("/byStatus/:id/:status", authenticateToken, async (req, res) => {
     try {
-        const {userID, gameID} = req.params;
-        if (userID != req.user) {
+        const {id, status} = req.params;
+        if (id != req.user) {
             return res.status(403).json({message: "You are not authorized to access this user's data"});
         }
 
-        const result = await checkUserCollection(userID, gameID);
-        return res.json({exist: result});
+        const result = await getUserCollectionByStatus(id, status);
+        if (result) {
+            return res.status(200).json(result);
+        } else {
+            return res.status(404).json({message: `user_id and status not found ${id} ${status}`});
+        }
     } catch (error) {
-        res.status(500).json({message: "Error checking user's collection", error});
+        res.status(500).json({message: "Error fetching user's collection by status", error});
     }
-})
+});
 
 export default router;

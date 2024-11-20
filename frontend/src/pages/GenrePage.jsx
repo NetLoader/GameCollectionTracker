@@ -37,7 +37,7 @@ const GenrePage = () => {
         <div className='container m-auto py-20 px-5'>
             <div className='flex flex-col'>
                 <h1 className='font-bold text-4xl'>{genre.genre_name}</h1>
-                <div className='flex flex-wrap justify-center gap-10 p-10'>
+                <div className='flex flex-wrap justify-center gap-5 p-5 sm:gap-10 sm:p-10'>
                     {games.map((game) => (
                     <GameCard
                         key={game.game_id}

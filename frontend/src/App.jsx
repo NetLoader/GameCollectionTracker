@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import SettingPage from './pages/SettingPage';
 import { refreshToken } from '../utility/refreshToken';
+import ProfilePage from './pages/ProfilePage';
 
 
 
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="login" element={<LoginPage setIsLoggedIn={setIsLoggedIn}/>} />
         <Route path="signup" element={<SignupPage />} />
         <Route path="setting" element={<SettingPage />} />
+        <Route path="profile" element={<ProfilePage />} />
         <Route path="game/:id" element={<GameInfoPage isLoggedIn={isLoggedIn} />} />
         <Route path="developer/:id" element={<CompanyPage type="developers" />} />
         <Route path="publisher/:id" element={<CompanyPage type="publishers" />} />

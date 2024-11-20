@@ -55,13 +55,13 @@ const SettingPage = () => {
                 <form onSubmit={changePassword}>
                     <div className='p-1'>
                         <label htmlFor="email" className='block'>Email:</label>
-                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' type="email" value={email} onChange={(e)=> setEmail(e.target.value)} required  />
+                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' id="email" name="email" type="email" value={email} onChange={(e)=> setEmail(e.target.value)} required  />
 
-                        <label htmlFor="password" className='block mt-2'>Old Password:</label>
-                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' type="password" value={oldPassword} onChange={(e)=> setOldPassword(e.target.value)} required  />
+                        <label htmlFor="oldPassword" className='block mt-2'>Old Password:</label>
+                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' id="oldPassword" name="oldPassword" type="password" value={oldPassword} onChange={(e)=> setOldPassword(e.target.value)} required  />
 
-                        <label htmlFor="password" className='block mt-2'>New Password:</label>
-                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' type="password" value={newPassword} onChange={(e)=> setNewPassword(e.target.value)} required  />
+                        <label htmlFor="newPassword" className='block mt-2'>New Password:</label>
+                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' id="newPassword" name="newPassword" type="password" value={newPassword} onChange={(e)=> setNewPassword(e.target.value)} required  />
 
                         {message === 'Password Updated!' ? <p className="text-blue-500 items-center mt-2">{message}</p> : <p className="text-red-500 items-center mt-2">{message}</p>}
 

@@ -21,9 +21,13 @@ const router = express.Router();
 
 //getUserByID
 // @ex: /users/12
-/* router.get("/:id", async (req, res) => {
+router.get("/:id", authenticateToken, async (req, res) => {
     try {
         const userID = req.params.id;
+        if (userID != req.user) {
+            return res.status(403).json({message: "You are not authorized to delete this user's data"});
+        }
+        
         const user = await getUserByID(userID);
         if (user) {
             res.status(200).json(user);
@@ -33,7 +37,7 @@ const router = express.Router();
     } catch (error) {
         res.status(500).json({message: "Error fetching user by id", error});
     }
-}); */
+});
 
 //createUser
 router.post("/", async (req, res) => {

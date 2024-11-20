@@ -40,10 +40,10 @@ const LoginPage = ({setIsLoggedIn}) => {
                 <form onSubmit={Login}>
                     <div className='p-1'>
                         <label htmlFor="email" className='block'>Email:</label>
-                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' type="email" value={email} onChange={(e)=> setEmail(e.target.value)} required  />
+                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' id="email" name="email" type="email" value={email} onChange={(e)=> setEmail(e.target.value)} required  />
 
                         <label htmlFor="password" className='block mt-2'>Password:</label>
-                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' type="password" value={password} onChange={(e)=> setPassword(e.target.value)} required  />
+                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' id="password" name="password" type="password" value={password} onChange={(e)=> setPassword(e.target.value)} required  />
 
                         {message ? <p className="text-red-500 items-center mt-2">{message}</p> : null}
 

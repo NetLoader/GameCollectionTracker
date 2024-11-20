@@ -50,10 +50,24 @@ export async function updateGameStatus (userID, gameID, status) {
     }
 };
 
+export async function checkUserCollection (userID, gameID) {
+    try {
+        const [result] = await pool.query(`
+            SELECT * 
+            FROM UserCollection 
+            WHERE user_id = ? AND game_id = ?
+        `, [userID, gameID]);
+        return (result.length > 0);
+    } catch (error) {
+        console.error("Error checking user's collection from controller: ", error);
+        throw error;
+    }
+}
+
 export async function getUserCollection(userID) {
     try {
         const [result] = await pool.query(`
-            SELECT uc.user_id, uc.game_id, uc.status, g.game_title
+            SELECT uc.user_id, uc.game_id, uc.status, g.game_title, g.game_image_url
             FROM UserCollection uc
             JOIN Games g ON uc.game_id = g.game_id
             WHERE uc.user_id = ?
@@ -65,16 +79,17 @@ export async function getUserCollection(userID) {
     }
 };
 
-export async function checkUserCollection (userID, gameID) {
+export async function getUserCollectionByStatus(userID, status) {
     try {
         const [result] = await pool.query(`
-            SELECT * 
-            FROM UserCollection 
-            WHERE user_id = ? AND game_id = ?
-        `, [userID, gameID]);
-        return (result.length > 0);
+            SELECT uc.user_id, uc.game_id, uc.status, g.game_title, g.game_image_url
+            FROM UserCollection uc
+            JOIN Games g ON uc.game_id = g.game_id
+            WHERE uc.user_id = ? AND uc.status = ?
+        `, [userID, status]);
+        return result;
     } catch (error) {
-        console.error("Error checking user's collection from controller: ", error);
+        console.error("Error fetching user's collection by status from controller: ", error);
         throw error;
     }
 }

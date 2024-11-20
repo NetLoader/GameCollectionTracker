@@ -34,13 +34,13 @@ const SignupPage = () => {
                 <form onSubmit={Signup}>
                     <div className='p-1'>
                         <label htmlFor="username" className='block'>Username:</label>
-                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' type="username" value={username} onChange={(e)=> setUsername(e.target.value)} required  />
+                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' id="username" name="username" type="username" value={username} onChange={(e)=> setUsername(e.target.value)} required  />
 
                         <label htmlFor="email" className='block mt-2'>Email:</label>
-                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' type="email" value={email} onChange={(e)=> setEmail(e.target.value)} required  />
+                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' id="email" name="email" type="email" value={email} onChange={(e)=> setEmail(e.target.value)} required  />
 
                         <label htmlFor="password" className='block mt-2'>Password:</label>
-                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' type="password" value={password} onChange={(e)=> setPassword(e.target.value)} required  />
+                        <input className='w-full p-1 bg-gray-700 border border-gray-500 rounded' id="password" name="password" type="password" value={password} onChange={(e)=> setPassword(e.target.value)} required  />
 
                         {message === 'Signup successful!' ? <p className="text-blue-500 items-center mt-2">{message}</p> : <p className="text-red-500 items-center mt-2">{message}</p>}
 

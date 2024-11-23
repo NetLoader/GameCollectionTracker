@@ -11,6 +11,7 @@ import SignupPage from './pages/SignupPage';
 import SettingPage from './pages/SettingPage';
 import { refreshToken } from '../utility/refreshToken';
 import ProfilePage from './pages/ProfilePage';
+import GenreListPage from './pages/GenreListPage';
 
 
 
@@ -46,6 +47,7 @@ const App = () => {
         <Route path="developer/:id" element={<CompanyPage type="developers" />} />
         <Route path="publisher/:id" element={<CompanyPage type="publishers" />} />
         <Route path="genre/:id" element={<GenrePage />} />
+        <Route path="genrelist" element={<GenreListPage />} />
       </Route>
     )
   );

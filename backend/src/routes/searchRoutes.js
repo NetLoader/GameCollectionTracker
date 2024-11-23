@@ -1,5 +1,5 @@
 import express from "express";
-import { getGamesByName, getDevelopersByName, getPublishersByName, getGameByGenre, getGameByPlatform } from "../controllers/searchController.js"
+import { getGamesByName, getDevelopersByName, getPublishersByName, getGenreByName, getPlatformByName } from "../controllers/searchController.js"
 
 const router = express.Router();
 
@@ -21,13 +21,13 @@ router.get("/", async (req, res) => {
             result = await getPublishersByName(contentName);
             res.status(200).json(result);
         } else if (contentType == "genre") {
-            result = await getGameByGenre(contentName);
+            result = await getGenreByName(contentName);
             res.status(200).json(result);
         } else if (contentType == "platform"){
-            result = await getGameByPlatform(contentName);
+            result = await getPlatformByName(contentName);
             res.status(200).json(result);
         } else {
-            res.status(400).json({message: "Please enter a valid content type and content name"})
+            res.status(400).json([{message: "Please enter a valid content type and content name"}])
         }
     } catch (error) {
         res.status(500).json({message: "Error searching", error});

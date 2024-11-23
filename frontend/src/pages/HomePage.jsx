@@ -4,12 +4,13 @@ import GameCard from '../components/GameCard'
 
 const HomePage = () => {
   const [games, setGames] = useState([]);
+  const [offSet, setOffSet] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await fetch('/api/games?limit=200&offset=0'); 
+        const response = await fetch(`/api/games?limit=10&offset=${offSet}`); 
         const data = await response.json();
         setGames(data); 
       } catch (error) {
@@ -19,7 +20,14 @@ const HomePage = () => {
       }
     };
     fetchGames(); 
-  }, []);
+  }, [offSet]);
+
+  const nextPage = () => {
+    setOffSet(offSet + 10);
+  }
+  const previousPage = () => {
+    setOffSet(offSet - 10);
+  }
 
   if (loading) {
     return <div>Loading...</div>
@@ -36,6 +44,10 @@ const HomePage = () => {
             imageURL={game.game_image_url}
           />
         ))}
+      </div>
+      <div className='flex justify-center gap-10 pb-5'>
+        {offSet <=0 ? null : <button onClick={() => previousPage()} className='bg-gray-800 hover:bg-gray-600 p-2 rounded w-24 text-center font-bold'>Previous</button>}
+        {offSet >=190 ? null : <button onClick={() => nextPage()} className='bg-gray-800 hover:bg-gray-600 p-2 rounded w-24 text-center font-bold'>Next</button>}
       </div>
     </div>
   )

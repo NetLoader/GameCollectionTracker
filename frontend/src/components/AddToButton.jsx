@@ -19,7 +19,8 @@ const AddToButton = ({gameID, isLoggedIn}) => {
 
     useEffect(() => {
         const checkGameInCollection = async () => {
-            const response = await fetch(`/api/userCollections/${userID}/${gameID}`, {
+            let response;
+            response = await fetch(`/api/userCollections/${userID}/${gameID}`, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`}
             })
@@ -131,7 +132,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
         <div className='relative'>
             {isLoggedIn ? <button onClick={toggleDropDown} className='rounded bg-gray-800 p-2 font-bold border border-gray-700'>Add To</button> : <button onClick={toLoginPage} className='rounded bg-gray-800 p-2 font-bold border border-gray-700'>Log In</button>}
             
-            {dropDown && (
+            {dropDown ? (
                 <div className="flex flex-col absolute mt-1 w-32 right-1 translate-x-8 bg-gray-900 text-white border-2 border-gray-600 rounded shadow-lg z-50">
                     <button onClick={() => addGameToCollection('Completed')} className='block px-4 py-2 font-bold hover:bg-gray-700 rounded'>Completed</button>
                     <button onClick={() => addGameToCollection('Playing')} className='block px-4 py-2 font-bold hover:bg-gray-700 rounded'>Playing</button>
@@ -139,9 +140,9 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                     <button onClick={() => addGameToCollection('Dropped')} className='block px-4 py-2 font-bold hover:bg-gray-700 rounded'>Dropped</button>
                     {gameExist ? <button onClick={deleteGameFromCollection} className='block px-4 py-2 font-bold bg-red-950 hover:bg-red-800 rounded'>Remove</button> : null}
                 </div>
-            )}
+            ) : null}
 
-            {message && <p className="absolute w-44 text-center font-bold text-emerald-400 mt-1 right-0 translate-x-14">{message}</p>}
+            {message ? <p className="absolute w-44 text-center font-bold text-emerald-400 mt-1 right-0 translate-x-14">{message}</p> : null}
         </div>
     )
 }

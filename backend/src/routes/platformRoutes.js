@@ -1,5 +1,5 @@
 import express from "express";
-import { getPlatforms, getPlatformByID } from "../controllers/platformController.js";
+import { getPlatforms, getPlatformByID, getPlatformGameByID } from "../controllers/platformController.js";
 const router = express.Router();
 
 //getPlatforms
@@ -31,5 +31,19 @@ router.get("/:id", async (req, res) => {
         res.status(500).json({message: "Error fetching platform by id", error});
     }
 });
+
+router.get("/:id/games", async (req, res) => {
+    try {
+        const platformID = req.params.id;
+        const games = await getPlatformGameByID(platformID);
+        if (games) {
+            res.json(games)
+        } else {
+            res.status(404).json({message: "Platform not found"})
+        }
+    } catch (error) {
+        res.status(500).json({message: "Error fetching platform game", error});
+    }
+})
 
 export default router;

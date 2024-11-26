@@ -3,21 +3,20 @@ import {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
 import GameCard from '../components/GameCard'
 
-
-const CompanyPage = ({type}) => {
+const PlatformPage = () => {
     const {id} = useParams();
-    const [company, setCompany] = useState(null);
+    const [platform, setPlatform] = useState(null);
     const [games, setGames] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCompany = async () => {
+        const fetchPlatform = async () => {
             try {
-                const resCompany = await fetch(`/api/${type}/${id}`);
-                const companyData = await resCompany.json();
-                setCompany(companyData);
+                const resPlatform = await fetch(`/api/platforms/${id}`);
+                const platformData = await resPlatform.json();
+                setPlatform(platformData);
 
-                const resGames = await fetch(`/api/${type}/${id}/games`);
+                const resGames = await fetch(`/api/platforms/${id}/games`);
                 const gamesData = await resGames.json();
                 setGames(gamesData);
 
@@ -27,8 +26,8 @@ const CompanyPage = ({type}) => {
                 setLoading(false);
             }
         };
-        fetchCompany();
-    }, [id, type]);
+        fetchPlatform();
+    }, [id]);
 
     if (loading) {
         return <div>Loading...</div>
@@ -37,7 +36,7 @@ const CompanyPage = ({type}) => {
     return (
         <div className='container m-auto py-20 px-5'>
             <div className='flex flex-col'>
-                <h1 className='font-bold text-4xl'>{type === "developers" ? company.developer_name : company.publisher_name}</h1>
+                <h1 className='font-bold text-4xl'>{platform.platform_name}</h1>
                 <div className='flex flex-wrap justify-center gap-5 p-5 sm:gap-10 sm:p-10'>
                     {games.map((game) => (
                         <GameCard
@@ -53,4 +52,4 @@ const CompanyPage = ({type}) => {
     )
 }
 
-export default CompanyPage
+export default PlatformPage

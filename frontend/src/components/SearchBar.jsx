@@ -65,8 +65,8 @@ const SearchBar = () => {
                 <input type="text" onClick={toggleDropDownSearch} className='px-4 py-2 text-white bg-gray-800 border-2 border-gray-600 rounded-r w-24 md:w-64' placeholder='Search' value={searchText} onChange={(e) => {searching(e.target.value)}}/>
                 {dropDownSearch && searchResult.length > 0 ? (
                     <div className='absolute mt-3 py-2 w-24 md:w-64 bg-gray-900 text-white border-2 border-gray-600 rounded shadow-lg z-50 translate-y-8 text-center'>
-                        {searchResult.map((result) => (
-                            <div>
+                        {searchResult.map((result, index) => (
+                            <div key={searchType === 'game' ? `${searchType}${index}` : searchType === 'genre' ? `${searchType}${index}` : `${searchType}${index}`}>
                                 {searchType === 'game' ? (<button onClick={() => click(result.game_id)} className='bg-gray-800 hover:bg-gray-700 w-full py-1 my-1'>{result.game_title}</button>)
                                 :searchType === 'genre' ? (<button onClick={() => click(result.genre_id)} className='bg-gray-800 hover:bg-gray-700 w-full py-1 my-1'>{result.genre_name}</button>)
                                 : <button onClick={() => click(result.platform_id)} className='bg-gray-800 hover:bg-gray-700 w-full py-1 my-1'>{result.platform_name}</button>}

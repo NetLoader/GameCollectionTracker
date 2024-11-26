@@ -1,5 +1,5 @@
 import express from "express";
-import {getGameByID, getGameGenresByID, getGamePlatformsByID, getGames} from "../controllers/gameController.js"
+import {getGameByID, getGameGenresByID, getGamePlatformsByID, getGames, getGameScreenshotsByID} from "../controllers/gameController.js"
 const router = express.Router();
 
 //getGames
@@ -60,6 +60,20 @@ router.get("/:id/platforms", async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({message: "Error fetching game platforms by id", error});
+    }
+})
+
+router.get("/:id/screenshots", async (req, res) => {
+    try {
+        const gameID = req.params.id;
+        const screenshots = await getGameScreenshotsByID(gameID);
+        if (screenshots) {
+            res.json(screenshots)
+        } else {
+            res.status(404).json({message: "Screenshots not found"})
+        }
+    } catch (error) {
+        res.status(500).json({message: "Error fetching game screenshots by id", error});
     }
 })
 

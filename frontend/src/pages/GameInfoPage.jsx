@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import GameInfoCard from '../components/GameInfoCard';
 import AddToButton from '../components/AddToButton';
+import Screenshots from '../components/Screenshots';
 
 const GameInfoPage = ({isLoggedIn}) => {
   const {id} = useParams();
@@ -62,8 +63,8 @@ const GameInfoPage = ({isLoggedIn}) => {
 
   return (
     <div className='container m-auto py-20 px-5'>
-      <div className='flex flex-row space-x-10 items-start'>
-        <div className='flex flex-col items-center w-1/3'>
+      <div className='flex flex-col sm:flex-row space-x-10 sm:items-start'>
+        <div className='flex flex-col items-center sm:w-1/3 mb-8'>
           <GameInfoCard 
             gameName={game.game_title}
             imageURL={game.game_image_url}
@@ -72,7 +73,7 @@ const GameInfoPage = ({isLoggedIn}) => {
             <AddToButton gameID={id} isLoggedIn={isLoggedIn}/>
           </div>
         </div>
-        <div className='flex flex-col w-2/3'>
+        <div className='flex flex-col sm:w-2/3'>
           <div>
             <h1 className='font-bold text-4xl'>{game.game_title}</h1>
           </div>
@@ -98,17 +99,18 @@ const GameInfoPage = ({isLoggedIn}) => {
                 </span>
               ))}</p>
             </div>
-            <div className='flex flex-col w-1/2'>
+            <div className='flex flex-col w-1/2 pb-10'>
               <h1>Releases: {platform.map(platform => (
-                <p key={platform.platform_id}>{platform.platform_name}</p>
+                <Link to={`/platform/${platform.platform_id}`} key={platform.platform_id} className='block text-blue-400 underline'>{platform.platform_name}</Link>
               ))}</h1>
             </div>
           </div>
-          <div className='pt-20'>
+          <Screenshots gameID={game.game_id}/>
+          <div className='pt-10'>
             <h2 className='font-bold text-xl'>Game Description:</h2>
             <p className='pt-5'>{game.game_description}</p>
           </div>
-          <div className='pt-20'>
+          <div className='pt-10'>
             <h2 className='font-bold text-xl'>Storyline:</h2>
             <p className='pt-5'>{game.game_story ? game.game_story : '-'}</p>
           </div>

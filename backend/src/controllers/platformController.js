@@ -30,3 +30,25 @@ export async function getPlatformByID(platformID) {
         throw error;
     }
 }
+
+export async function getPlatformGameByID(platformID) {
+    try {
+        const [games] = await pool.query(`
+            SELECT g.game_id, g.game_title, g.game_image_url, p.platform_id, p.platform_name
+            FROM Platforms p
+            INNER JOIN GamePlatform gp
+            ON p.platform_id = gp.platform_id
+            INNER JOIN Games g
+            ON gp.game_id = g.game_id
+            WHERE p.platform_id = ?   
+        `, [platformID]);
+        if (games.length > 0) {
+            return games;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching platform game by id from controller: ", error);
+        throw error;
+    }
+}

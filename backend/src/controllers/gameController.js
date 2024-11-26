@@ -75,3 +75,21 @@ export async function getGamePlatformsByID(gameID) {
         throw error;
     }
 }
+
+export async function getGameScreenshotsByID(gameID) {
+    try {
+        const [screenshots] = await pool.query(`
+            SELECT game_screenshots_url
+            FROM GameScreenshots
+            WHERE game_id = ?    
+        `, [gameID])
+        if (screenshots.length > 0) {
+            return screenshots;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching game screenshots from controller: ", error);
+        throw error;
+    }
+}

@@ -28,7 +28,7 @@ const NavBar = ({isLoggedIn, setIsLoggedIn}) => {
             </div>
             <div className='flex items-center space-x-1 md:space-x-5'>
                 <SearchBar/>
-                <Link className='hover:bg-gray-700 px-3 py-2 rounded' to="/genrelist">Genres</Link>
+                <Link className='hidden sm:block hover:bg-gray-700 px-3 py-2 rounded' to="/genrelist">Genres</Link>
                 {isLoggedIn ? (
                     <div>
                         <button onClick={toggleDropDown} className='hover:bg-gray-700 px-3 py-2 rounded'>
@@ -36,6 +36,7 @@ const NavBar = ({isLoggedIn, setIsLoggedIn}) => {
                         </button>
                         {dropDown ? (
                             <div className="absolute right-3 mt-1 w-28 bg-gray-900 text-white border-2 border-gray-600 rounded shadow-lg z-50">
+                                <Link to="/genrelist" onClick={toggleDropDown}  className='sm:hidden block px-4 py-2 hover:bg-gray-700 rounded'>Genres</Link>
                                 <Link to="/profile" onClick={toggleDropDown} className="block px-4 py-2 hover:bg-gray-700 rounded">Profile</Link>
                                 <Link to="/setting" onClick={toggleDropDown} className="block px-4 py-2 hover:bg-gray-700 rounded">Settings</Link>
                                 <button onClick={logout} className="block px-4 py-2 font-bold text-red-600 hover:bg-gray-700 rounded w-full text-left">Logout</button>

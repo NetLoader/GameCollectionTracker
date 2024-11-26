@@ -12,6 +12,7 @@ import SettingPage from './pages/SettingPage';
 import { refreshToken } from '../utility/refreshToken';
 import ProfilePage from './pages/ProfilePage';
 import GenreListPage from './pages/GenreListPage';
+import PlatformPage from './pages/PlatformPage'
 
 
 
@@ -46,6 +47,7 @@ const App = () => {
         <Route path="game/:id" element={<GameInfoPage isLoggedIn={isLoggedIn} />} />
         <Route path="developer/:id" element={<CompanyPage type="developers" />} />
         <Route path="publisher/:id" element={<CompanyPage type="publishers" />} />
+        <Route path="platform/:id" element={<PlatformPage />} />
         <Route path="genre/:id" element={<GenrePage />} />
         <Route path="genrelist" element={<GenreListPage />} />
       </Route>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import GameCard from '../components/GameCard';
+import { refreshTokenUtility } from '../../utility/refreshToken';
 
 const ProfilePage = () => {
     const [games, setGames] = useState([]);
@@ -11,13 +12,27 @@ const ProfilePage = () => {
     const userID = localStorage.getItem('userID');
     const localAccessToken = localStorage.getItem('accessToken');
     const localRefreshToken = localStorage.getItem('refreshToken');
+    let newAccessToken;
 
     const getUsername = async () => {
+        let response;
         try {
-            const response = await fetch(`/api/users/${userID}`, {
+            response = await fetch(`/api/users/${userID}`, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`}
             });
+            if (response.status === 403) {
+                newAccessToken = await refreshTokenUtility(localRefreshToken);
+                if (newAccessToken) {
+                    response = await fetch(`/api/users/${userID}`, {
+                        method: 'GET',
+                        headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`}
+                    });
+                } else {
+                    alert('Session expired. Please log in again.');
+                    return;
+                }
+            }
             const data = await response.json();
             setUsername(data.username);
         } catch (error) {
@@ -39,11 +54,11 @@ const ProfilePage = () => {
                     headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`}
                 });
                 if (response.status === 403) {
-                    const newAccessToken = await refreshToken(localRefreshToken);
+                    newAccessToken = await refreshTokenUtility(localRefreshToken);
                     if (newAccessToken) {
                         response = await fetch(`/api/userCollections/${userID}`, {
                             method: 'GET',
-                            headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`}
+                            headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`}
                         });
                     } else {
                         alert('Session expired. Please log in again.');

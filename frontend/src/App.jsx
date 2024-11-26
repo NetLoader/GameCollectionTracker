@@ -9,7 +9,7 @@ import GenrePage from './pages/GenrePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import SettingPage from './pages/SettingPage';
-import { refreshToken } from '../utility/refreshToken';
+import { refreshTokenUtility } from '../utility/refreshToken';
 import ProfilePage from './pages/ProfilePage';
 import GenreListPage from './pages/GenreListPage';
 import PlatformPage from './pages/PlatformPage'
@@ -23,7 +23,7 @@ const App = () => {
     const verifyToken = async () => {
       const localRefreshToken = localStorage.getItem('refreshToken');
       if (localRefreshToken) {
-        const accessToken = await refreshToken(localRefreshToken);
+        const accessToken = await refreshTokenUtility(localRefreshToken);
         if (accessToken) {
           setIsLoggedIn(true);
         } else {

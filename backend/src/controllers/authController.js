@@ -53,7 +53,7 @@ export async function refreshAccessToken(refreshToken) {
 };
 
 function generateAccessToken(userID) {
-    return jwt.sign({userID}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h"});        
+    return jwt.sign({userID}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "6h"});        
 };
 
 function generateRefreshToken(userID) {

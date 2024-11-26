@@ -1,12 +1,13 @@
 import React from 'react'
 import { useState } from 'react';
-import { refreshToken } from '../../utility/refreshToken';
+import { refreshTokenUtility } from '../../utility/refreshToken';
 
 const SettingPage = () => {
     const [email, setEmail] = useState('');
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [message, setMessage] = useState('');
+    let newAccessToken;
 
     const changePassword = async (event) => {
         event.preventDefault();
@@ -23,7 +24,7 @@ const SettingPage = () => {
             });
 
             if (response.status === 403) {
-                const newAccessToken = await refreshToken(localRefreshToken);
+                newAccessToken = await refreshTokenUtility(localRefreshToken);
                 if (newAccessToken) {
                     response = await fetch('/api/users', {
                         method: 'PUT',

@@ -1,4 +1,4 @@
-export const refreshToken = async (refreshToken) => {
+export const refreshTokenUtility = async (refreshToken) => {
     try {
         const response = await fetch('/api/auth/refreshToken', {
             method: 'POST',
@@ -17,6 +17,9 @@ export const refreshToken = async (refreshToken) => {
             localStorage.removeItem('userID');
             return null;
         } else {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('userID');
             return null;
         }
     } catch (error) {

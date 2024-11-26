@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
+import { refreshTokenUtility } from '../../utility/refreshToken'
 
 const AddToButton = ({gameID, isLoggedIn}) => {
     const [dropDown, setDropDown] = useState(false);
@@ -25,12 +26,11 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                 headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`}
             })
             if (response.status === 403) {
-                newAccessToken = await refreshToken(localRefreshToken);
+                newAccessToken = await refreshTokenUtility(localRefreshToken);
                 if (newAccessToken) {
-                    response = await fetch(`/api/userCollections/checkGame`, {
+                    response = await fetch(`/api/userCollections/${userID}/${gameID}`, {
                         method: 'GET',
-                        headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
-                        body: JSON.stringify({userID, gameID}) 
+                        headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`}
                     })
                 } else {
                     alert('Session expired. Please log in again.');
@@ -45,7 +45,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
             }
         }
         checkGameInCollection();
-    }, [gameExist])
+    }, [gameExist, gameID, localAccessToken, localRefreshToken])
 
     const addGameToCollection = async (status) => {
         let response;
@@ -56,6 +56,19 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                     headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
                     body: JSON.stringify({userID, gameID, status})
                 });
+                if (response.status === 403) {
+                    newAccessToken = await refreshTokenUtility(localRefreshToken);
+                    if (newAccessToken) {
+                        response = await fetch('/api/userCollections', {
+                            method: 'PUT',
+                            headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`},
+                            body: JSON.stringify({userID, gameID, status})
+                        });
+                    } else {
+                        alert('Session expired. Please log in again.');
+                        return;
+                    }
+                }
                 if (response.ok) {
                     setMessage('Game status updated!');
                     setTimeout(() => setMessage(''), 2000);
@@ -70,6 +83,19 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                     headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
                     body: JSON.stringify({userID, gameID, status}) 
                 })
+                if (response.status === 403) {
+                    newAccessToken = await refreshTokenUtility(localRefreshToken);
+                    if (newAccessToken) {
+                        response = await fetch('/api/userCollections', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`},
+                            body: JSON.stringify({userID, gameID, status}) 
+                        })
+                    } else {
+                        alert('Session expired. Please log in again.');
+                        return;
+                    }
+                }
                 if (response.ok) {
                     setGameExist(true);
                     setMessage('Game added!');
@@ -96,11 +122,11 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                 body: JSON.stringify({userID, gameID}),
             })
             if (response.status === 403) {
-                newAccessToken = await refreshToken(localRefreshToken);
+                newAccessToken = await refreshTokenUtility(localRefreshToken);
                 if (newAccessToken) {
                     response = await fetch(`/api/userCollections/`, {
                         method: 'DELETE',
-                        headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
+                        headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`},
                         body: JSON.stringify({userID, gameID}),
                     })
                 } else {

@@ -26,7 +26,7 @@ const Screenshots = ({gameID}) => {
     return (
         <div className='flex items-center gap-2 py-4 overflow-auto'>
             {gameplayImage.map((image) => (
-                <img key={image.game_screenshots_url} src={image.game_screenshots_url} alt="screenshots" className='border border-gray-500 w-full'/>
+                <img key={image.game_screenshots_url} src={image.game_screenshots_url} alt="screenshots" className='border border-gray-500 w-auto'/>
             ))}
         </div>
     )

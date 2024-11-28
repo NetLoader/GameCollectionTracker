@@ -20,6 +20,10 @@ const AddToButton = ({gameID, isLoggedIn}) => {
 
     useEffect(() => {
         const checkGameInCollection = async () => {
+            if (!userID || !localAccessToken || !localRefreshToken) {
+                setGameExist(false);
+                return;
+            }
             let response;
             response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections/${userID}/${gameID}`, {
                 method: 'GET',
@@ -45,7 +49,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
             }
         }
         checkGameInCollection();
-    }, [gameExist, gameID, localAccessToken, localRefreshToken])
+    }, [gameExist])
 
     const addGameToCollection = async (status) => {
         let response;

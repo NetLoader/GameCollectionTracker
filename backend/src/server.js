@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cors());
 
 //Setup my database
-async function initDatabase() {
+/* async function initDatabase() {
     try {
         await dbSetup();
         console.log("Database setup complete");
@@ -27,11 +27,11 @@ async function initDatabase() {
         console.log("Database setup failed:", error);
     }
 }
-initDatabase();
+initDatabase(); */
 
 //fetch data from IGDB and insert them into db
 // Comment this block out after fetching the data so that normal user cannot access this endpoint
-app.get("/api/fetchGamesFromIGDB", async (req, res) => {
+/* app.get("/api/fetchGamesFromIGDB", async (req, res) => {
     try {
         const gamesData = await fetchGamesData(); 
         await insertDataIntoDB(gamesData);
@@ -40,7 +40,7 @@ app.get("/api/fetchGamesFromIGDB", async (req, res) => {
         console.error("Error fetching games data:", error);
         res.status(500).send("Error fetching games data");
     }
-});
+}); */
 
 //Routers
 app.use("/api/search", searchRoutes);

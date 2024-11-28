@@ -63,7 +63,7 @@ function generateRefreshToken(userID) {
 async function getRefreshToken(refreshToken) {
     try {
         const [result] = await pool.query(`
-            SELECT refresh_token FROM RefreshToken WHERE refresh_token = ?`, [refreshToken]);
+            SELECT refresh_token FROM refreshtoken WHERE refresh_token = ?`, [refreshToken]);
         if (result.length > 0) {
             return result[0].refresh_token;
         } else {
@@ -78,7 +78,7 @@ async function getRefreshToken(refreshToken) {
 async function saveRefreshToken(userID, refreshToken) {
     try {
         const [result] = await pool.query(`
-            INSERT INTO RefreshToken (user_id, refresh_token) VALUES (?, ?)`, [userID, refreshToken]);
+            INSERT INTO refreshtoken (user_id, refresh_token) VALUES (?, ?)`, [userID, refreshToken]);
         return (result.affectedRows > 0);
     } catch (error) {
         console.error("Error saving refresh token from controller: ", error);
@@ -89,7 +89,7 @@ async function saveRefreshToken(userID, refreshToken) {
 async function deleteRefreshToken(refreshToken) {
     try {
         const [result] = await pool.query(`
-            DELETE FROM RefreshToken WHERE refresh_token = ?`, [refreshToken]);
+            DELETE FROM refreshtoken WHERE refresh_token = ?`, [refreshToken]);
         return (result.affectedRows > 0);
     } catch (error) {
         console.error("Error deleting refresh token from controller: ", error);

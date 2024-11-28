@@ -4,7 +4,7 @@ export async function getDevelopers(limit, offset) {
     try {
         const [dev] = await pool.query(`
             SELECT *
-            FROM Developers
+            FROM developers
             ORDER BY developer_id
             LIMIT ? OFFSET ?`, [limit, offset]);
         return dev;
@@ -18,7 +18,7 @@ export async function getDevelopersByID(devID) {
     try {
         const [dev] = await pool.query(`
             SELECT * 
-            FROM Developers 
+            FROM developers 
             WHERE developer_id = ?`, [devID]);
         if (dev.length > 0) {
             return dev[0];
@@ -35,8 +35,8 @@ export async function getDeveloperGamesByID(devID) {
     try {
         const [games] = await pool.query(`
             SELECT g.game_id, g.game_title, d.developer_id, d.developer_name, g.game_image_url
-            FROM Games g
-            INNER JOIN Developers d
+            FROM games g
+            INNER JOIN developers d
             ON g.developer_id = d.developer_id
             WHERE g.developer_id = ?    
         `, [devID]);

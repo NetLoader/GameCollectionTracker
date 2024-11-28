@@ -4,7 +4,7 @@ export async function getGenres(limit, offset) {
     try {
         const [genres] = await pool.query(`
             SELECT * 
-            FROM Genres 
+            FROM genres 
             ORDER BY genre_id 
             LIMIT ? OFFSET ?`, [limit, offset]);
         return genres;
@@ -18,7 +18,7 @@ export async function getGenreByID(genreID) {
     try {
         const [genres] = await pool.query(`
             SELECT * 
-            FROM Genres 
+            FROM genres 
             WHERE genre_id = ?`, [genreID]);
         if (genres.length > 0) {
             return genres[0];
@@ -35,9 +35,9 @@ export async function getGenreGamesByID(genreID) {
     try {
         const [games] = await pool.query(`
             SELECT g.game_id, g.game_title, gr.genre_id, gr.genre_name, g.game_image_url
-            FROM Games g
-            INNER JOIN GameGenre gg ON g.game_id = gg.game_id
-            INNER JOIN Genres gr ON gg.genre_id = gr.genre_id
+            FROM games g
+            INNER JOIN gamegenre gg ON g.game_id = gg.game_id
+            INNER JOIN genres gr ON gg.genre_id = gr.genre_id
             WHERE gr.genre_id = ?
         `, [genreID])
         if (games.length > 0) {

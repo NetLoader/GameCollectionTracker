@@ -4,7 +4,7 @@ export async function getPublishers(limit, offset) {
     try {
         const [publishers] = await pool.query(`
             SELECT * 
-            FROM Publishers 
+            FROM publishers 
             ORDER BY publisher_id 
             LIMIT ? OFFSET ?`, [limit, offset]);
         return publishers;
@@ -18,7 +18,7 @@ export async function getPublisherByID(publisherID) {
     try {
         const [publishers] = await pool.query(`
             SELECT * 
-            FROM Publishers 
+            FROM publishers 
             WHERE publisher_id = ?`, [publisherID]);
         if (publishers.length > 0) {
             return publishers[0];
@@ -35,8 +35,8 @@ export async function getPublisherGamesByID(publisherID) {
     try {
         const [games] = await pool.query(`
             SELECT g.game_id, g.game_title, p.publisher_id, p.publisher_name, g.game_image_url
-            FROM Games g
-            INNER JOIN Publishers p
+            FROM games g
+            INNER JOIN publishers p
             ON g.publisher_id = p.publisher_id
             WHERE g.publisher_id = ?    
         `, [publisherID]);

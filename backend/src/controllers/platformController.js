@@ -4,7 +4,7 @@ export async function getPlatforms(limit, offset) {
     try {
         const [platform] = await pool.query(`
             SELECT * 
-            FROM Platforms 
+            FROM platforms 
             ORDER BY platform_id 
             LIMIT ? OFFSET ?`, [limit, offset]);
         return platform;
@@ -18,7 +18,7 @@ export async function getPlatformByID(platformID) {
     try {
         const [platform] = await pool.query(`
             SELECT * 
-            FROM Platforms 
+            FROM platforms 
             WHERE platform_id = ?`, [platformID]);
         if (platform.length > 0) {
             return platform[0];
@@ -35,10 +35,10 @@ export async function getPlatformGameByID(platformID) {
     try {
         const [games] = await pool.query(`
             SELECT g.game_id, g.game_title, g.game_image_url, p.platform_id, p.platform_name
-            FROM Platforms p
-            INNER JOIN GamePlatform gp
+            FROM platforms p
+            INNER JOIN gameplatform gp
             ON p.platform_id = gp.platform_id
-            INNER JOIN Games g
+            INNER JOIN games g
             ON gp.game_id = g.game_id
             WHERE p.platform_id = ?   
         `, [platformID]);

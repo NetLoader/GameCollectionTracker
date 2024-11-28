@@ -1,6 +1,9 @@
 # Game Collection Tracker
 A web-based application that allows users to track and manage their game collections.
 
+## Link to the website
+https://voluble-crepe-beac31.netlify.app/
+
 ## Overview
 The Game Collection Tracker is a web-based application that helps gamers easily keep track of their games. It lets users organize thier game collection by marking them as "Currently Playing", "Playing", "Completed", or "Dropped". Users can also view details about each game, like its release date, developer, publisher, release platforms, and genre. The goal of this project is to make managing large game libraries simple and efficient.
 

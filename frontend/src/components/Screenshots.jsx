@@ -7,7 +7,7 @@ const Screenshots = ({gameID}) => {
     useEffect(() => {
         const fetchScreenshots = async () => {
             try {
-                const res = await fetch(`/api/games/${gameID}/screenshots`);
+                const res = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/games/${gameID}/screenshots`);
                 const data = await res.json();
                 setGameplayImage(data);
             } catch (error) {

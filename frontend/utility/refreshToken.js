@@ -1,6 +1,6 @@
 export const refreshTokenUtility = async (refreshToken) => {
     try {
-        const response = await fetch('/api/auth/refreshToken', {
+        const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/auth/refreshToken`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({refreshToken})

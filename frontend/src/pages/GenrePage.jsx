@@ -12,11 +12,11 @@ const GenrePage = () => {
     useEffect(() => {
         const fetchGenre = async () => {
             try {
-                const resGenre = await fetch(`/api/genres/${id}`);
+                const resGenre = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/genres/${id}`);
                 const genreData = await resGenre.json();
                 setGenre(genreData);
 
-                const resGames = await fetch(`/api/genres/${id}/games`);
+                const resGames = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/genres/${id}/games`);
                 const gamesData = await resGames.json();
                 setGames(gamesData);
 

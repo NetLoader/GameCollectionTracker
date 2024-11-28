@@ -10,7 +10,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await fetch(`/api/games?limit=10&offset=${offSet}`); 
+        const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/games?limit=10&offset=${offSet}`); 
         const data = await response.json();
         setGames(data); 
       } catch (error) {

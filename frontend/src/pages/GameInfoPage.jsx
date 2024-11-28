@@ -18,14 +18,14 @@ const GameInfoPage = ({isLoggedIn}) => {
   useEffect(() => {
     const fetchGame = async () => {
       try {
-        const resGame = await fetch(`/api/games/${id}`); 
+        const resGame = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/games/${id}`); 
         const gameData = await resGame.json();
         setGame(gameData); 
 
         const {developer_id, publisher_id} = gameData;
 
         if (developer_id) {
-          const resDev = await fetch(`/api/developers/${developer_id}`);
+          const resDev = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/developers/${developer_id}`);
           const devData = await resDev.json();
           setDeveloper(devData);
         } else {
@@ -33,18 +33,18 @@ const GameInfoPage = ({isLoggedIn}) => {
         }
         
         if (publisher_id) {
-          const resPub = await fetch(`/api/publishers/${publisher_id}`);
+          const resPub = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/publishers/${publisher_id}`);
           const pubData = await resPub.json();
           setPublisher(pubData);
         } else {
           setPublisher(null);
         }
 
-        const resGenre = await fetch(`/api/games/${id}/genres`);
+        const resGenre = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/games/${id}/genres`);
         const genreData = await resGenre.json();
         setGenre(genreData);
 
-        const resPlatform = await fetch(`/api/games/${id}/platforms`);
+        const resPlatform = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/games/${id}/platforms`);
         const platformData = await resPlatform.json();
         setPlatform(platformData);
 

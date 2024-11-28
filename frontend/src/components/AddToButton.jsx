@@ -21,14 +21,14 @@ const AddToButton = ({gameID, isLoggedIn}) => {
     useEffect(() => {
         const checkGameInCollection = async () => {
             let response;
-            response = await fetch(`/api/userCollections/${userID}/${gameID}`, {
+            response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections/${userID}/${gameID}`, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`}
             })
             if (response.status === 403) {
                 newAccessToken = await refreshTokenUtility(localRefreshToken);
                 if (newAccessToken) {
-                    response = await fetch(`/api/userCollections/${userID}/${gameID}`, {
+                    response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections/${userID}/${gameID}`, {
                         method: 'GET',
                         headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`}
                     })
@@ -51,7 +51,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
         let response;
         try {
             if (gameExist) {        // game exist, update the game status
-                response = await fetch('/api/userCollections', {
+                response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections`, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
                     body: JSON.stringify({userID, gameID, status})
@@ -59,7 +59,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                 if (response.status === 403) {
                     newAccessToken = await refreshTokenUtility(localRefreshToken);
                     if (newAccessToken) {
-                        response = await fetch('/api/userCollections', {
+                        response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections`, {
                             method: 'PUT',
                             headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`},
                             body: JSON.stringify({userID, gameID, status})
@@ -78,7 +78,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                     setTimeout(() => setMessage(''), 2000);
                 }
             } else {   // if game does not exist, add game
-                response = await fetch('/api/userCollections', {
+                response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
                     body: JSON.stringify({userID, gameID, status}) 
@@ -86,7 +86,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
                 if (response.status === 403) {
                     newAccessToken = await refreshTokenUtility(localRefreshToken);
                     if (newAccessToken) {
-                        response = await fetch('/api/userCollections', {
+                        response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections`, {
                             method: 'POST',
                             headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`},
                             body: JSON.stringify({userID, gameID, status}) 
@@ -116,7 +116,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
     const deleteGameFromCollection = async () => {
         let response;
         try {
-            response = await fetch(`/api/userCollections/`, {
+            response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections/`, {
                 method: 'DELETE',
                 headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
                 body: JSON.stringify({userID, gameID}),
@@ -124,7 +124,7 @@ const AddToButton = ({gameID, isLoggedIn}) => {
             if (response.status === 403) {
                 newAccessToken = await refreshTokenUtility(localRefreshToken);
                 if (newAccessToken) {
-                    response = await fetch(`/api/userCollections/`, {
+                    response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections/`, {
                         method: 'DELETE',
                         headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`},
                         body: JSON.stringify({userID, gameID}),

@@ -12,11 +12,11 @@ const PlatformPage = () => {
     useEffect(() => {
         const fetchPlatform = async () => {
             try {
-                const resPlatform = await fetch(`/api/platforms/${id}`);
+                const resPlatform = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/platforms/${id}`);
                 const platformData = await resPlatform.json();
                 setPlatform(platformData);
 
-                const resGames = await fetch(`/api/platforms/${id}/games`);
+                const resGames = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/platforms/${id}/games`);
                 const gamesData = await resGames.json();
                 setGames(gamesData);
 

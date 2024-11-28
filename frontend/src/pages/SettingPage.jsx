@@ -17,7 +17,7 @@ const SettingPage = () => {
         const localRefreshToken = localStorage.getItem('refreshToken');
         let response;
         try {
-            response = await fetch('/api/users', {
+            response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/users`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`},
                 body: JSON.stringify({userID, email, oldPassword, newPassword}),
@@ -26,7 +26,7 @@ const SettingPage = () => {
             if (response.status === 403) {
                 newAccessToken = await refreshTokenUtility(localRefreshToken);
                 if (newAccessToken) {
-                    response = await fetch('/api/users', {
+                    response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/users`, {
                         method: 'PUT',
                         headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`},
                         body: JSON.stringify({userID, email, oldPassword, newPassword}),

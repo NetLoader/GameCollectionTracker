@@ -17,14 +17,14 @@ const ProfilePage = () => {
     const getUsername = async () => {
         let response;
         try {
-            response = await fetch(`/api/users/${userID}`, {
+            response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/users/${userID}`, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json', Authorization: `Bearer ${localAccessToken}`}
             });
             if (response.status === 403) {
                 newAccessToken = await refreshTokenUtility(localRefreshToken);
                 if (newAccessToken) {
-                    response = await fetch(`/api/users/${userID}`, {
+                    response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/users/${userID}`, {
                         method: 'GET',
                         headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`}
                     });
@@ -44,9 +44,9 @@ const ProfilePage = () => {
         const fetchUserCollections = async () => {
             setLoading(true);
             let response;
-            let url = `/api/userCollections/${userID}`;
+            let url = `${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections/${userID}`;
             if (useStatus) {
-                url = `/api/userCollections/byStatus/${userID}/${status}`;
+                url = `${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections/byStatus/${userID}/${status}`;
             }
             try {
                 response = await fetch(url, {
@@ -56,7 +56,7 @@ const ProfilePage = () => {
                 if (response.status === 403) {
                     newAccessToken = await refreshTokenUtility(localRefreshToken);
                     if (newAccessToken) {
-                        response = await fetch(`/api/userCollections/${userID}`, {
+                        response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/userCollections/${userID}`, {
                             method: 'GET',
                             headers: {'Content-Type': 'application/json', Authorization: `Bearer ${newAccessToken}`}
                         });

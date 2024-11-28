@@ -8,7 +8,7 @@ const GenreListPage = () => {
     useEffect(() => {
         const fetchAllGenres = async () => {
             try {
-                const response = await fetch('/api/genres?limit=200&offset=0');
+                const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/genres?limit=200&offset=0`);
                 const data = await response.json();
                 setGenres(data); 
             } catch (error) {

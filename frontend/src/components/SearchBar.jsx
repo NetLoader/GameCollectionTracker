@@ -24,7 +24,7 @@ const SearchBar = () => {
             return;
         }
         try {
-            const response = await fetch(`/api/search?type=${searchType}&name=${searchText}`);
+            const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/search?type=${searchType}&name=${searchText}`);
             const data = await response.json();
             if (response.ok) {
                 setSearchResult(data);

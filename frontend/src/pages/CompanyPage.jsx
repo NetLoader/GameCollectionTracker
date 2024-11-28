@@ -13,11 +13,11 @@ const CompanyPage = ({type}) => {
     useEffect(() => {
         const fetchCompany = async () => {
             try {
-                const resCompany = await fetch(`/api/${type}/${id}`);
+                const resCompany = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/${type}/${id}`);
                 const companyData = await resCompany.json();
                 setCompany(companyData);
 
-                const resGames = await fetch(`/api/${type}/${id}/games`);
+                const resGames = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/api/${type}/${id}/games`);
                 const gamesData = await resGames.json();
                 setGames(gamesData);
 
